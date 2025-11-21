@@ -5,7 +5,7 @@ import { Settings, Camera, ChevronRight } from 'lucide-react';
 
 export function ProfileView() {
   return (
-    <div className="h-full bg-black text-white overflow-hidden flex flex-col pb-20">
+    <div className="h-full bg-black text-white overflow-hidden flex flex-col pb-[80px] pb-safe">
       <div className="flex-1 overflow-y-auto no-scrollbar px-6 pt-12">
         <div className="flex justify-end mb-4">
           <button className="p-2 text-gray-400 hover:text-white">

@@ -26,7 +26,7 @@ export function DiscoverView({ onOpenStory }: DiscoverViewProps) {
   }, [searchQuery, filter]);
 
   return (
-    <div className="h-full bg-black text-white overflow-hidden flex flex-col pb-20">
+    <div className="h-full bg-black text-white overflow-hidden flex flex-col pb-[80px] pb-safe">
       <div className="px-6 pt-12 pb-4 sticky top-0 bg-black/80 backdrop-blur-md z-20 border-b border-white/10">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-semibold tracking-tight">Discover</h1>
