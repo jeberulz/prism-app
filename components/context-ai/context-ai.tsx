@@ -22,6 +22,7 @@ interface Message {
 
 export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>('consensus');
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -34,6 +35,8 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
   useEffect(() => {
     if (isOpen) {
       setIsVisible(true);
+      // Small delay to trigger animation
+      setTimeout(() => setIsAnimating(true), 10);
       setActiveTab('consensus');
       // Initialize with welcome message when opening Copilot tab
       if (category) {
@@ -46,9 +49,12 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
         setMessages([welcomeMessage]);
       }
     } else {
-      setTimeout(() => setIsVisible(false), 300);
-      setMessages([]);
-      setInputValue('');
+      setIsAnimating(false);
+      setTimeout(() => {
+        setIsVisible(false);
+        setMessages([]);
+        setInputValue('');
+      }, 300);
     }
   }, [isOpen, category]);
 
@@ -155,13 +161,22 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
   ];
 
   return (
-    <div className="fixed inset-0 z-[10000] flex flex-col justify-end transition-all duration-300">
+    <div className="fixed inset-0 z-[10000] flex flex-col justify-end pointer-events-none">
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity opacity-100"
+        className={cn(
+          "absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 pointer-events-auto",
+          isAnimating ? "opacity-100" : "opacity-0"
+        )}
         onClick={onClose}
       />
 
-      <div className="glass-panel w-full h-[80vh] max-h-[calc(100vh-80px)] rounded-t-[32px] transform transition-transform duration-400 flex flex-col overflow-hidden relative z-10 border-t border-white/20 shadow-2xl slide-up-panel" style={{ bottom: '80px' }}>
+      <div 
+        className={cn(
+          "glass-panel w-full h-[80vh] max-h-[calc(100vh-80px)] rounded-t-[32px] flex flex-col overflow-hidden relative z-10 border-t border-white/20 shadow-2xl pointer-events-auto",
+          isAnimating ? "slide-up-panel" : "slide-down-panel"
+        )}
+        style={{ bottom: '80px' }}
+      >
         <div className="w-full flex justify-center pt-3 pb-1 cursor-pointer bg-transparent" onClick={onClose}>
           <div className="w-12 h-1 bg-white/30 rounded-full" />
         </div>

@@ -144,3 +144,29 @@
   animation: heartPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+@keyframes slideUpPanel {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDownPanel {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+.slide-up-panel {
+  animation: slideUpPanel 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.slide-down-panel {
+  animation: slideDownPanel 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
