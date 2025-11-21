@@ -16,7 +16,7 @@ export function ProfileView() {
         <div className="flex flex-col items-center mb-8">
           <div className="w-24 h-24 rounded-full border-2 border-gray-800 p-1 mb-4 relative group cursor-pointer">
             <Image
-              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop"
+              src="https://picsum.photos/400/400?random=21"
               alt="Profile"
               width={96}
               height={96}
@@ -76,7 +76,7 @@ export function ProfileView() {
           <div className="bg-gray-900/30 rounded-xl p-4 border border-gray-800 flex gap-4 items-center">
             <div className="w-12 h-12 bg-gray-800 rounded-lg overflow-hidden flex-shrink-0">
               <Image
-                src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2670&auto=format&fit=crop"
+                src="https://picsum.photos/200/200?random=22"
                 alt="Bookmark"
                 width={48}
                 height={48}

@@ -4,7 +4,7 @@ export const stories: Story[] = [
   {
     category: "Entertainment", color: "purple", source: "Rolling Stone", time: "1h ago",
     title: "The Weeknd's AI vocals controversy sparks industry-wide legal battle.",
-    img: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2670&auto=format&fit=crop",
+    img: "https://picsum.photos/800/1200?random=1",
     nuance: "Missing Context", likeCount: "124k",
     lensData: {
       raw: { title: "The Weeknd's AI vocals controversy sparks industry-wide legal battle.", summary: "Click the headline above to read the full story and analysis..." },
@@ -15,7 +15,7 @@ export const stories: Story[] = [
   {
     category: "Entertainment", color: "pink", source: "Variety", time: "2h ago",
     title: "Euphoria Season 3 delayed again: HBO cites 'creative overhaul'.",
-    img: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=2525&auto=format&fit=crop",
+    img: "https://picsum.photos/800/1200?random=2",
     nuance: null, likeCount: "89k",
     lensData: {
       raw: { title: "Euphoria Season 3 delayed again: HBO cites 'creative overhaul'.", summary: "Click the headline above to read the full story and analysis..." },
@@ -26,7 +26,7 @@ export const stories: Story[] = [
   {
     category: "Music", color: "purple", source: "Billboard", time: "3h ago",
     title: "TikTok vs UMG: The silent library is hurting emerging artists most.",
-    img: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=2670&auto=format&fit=crop",
+    img: "https://picsum.photos/800/1200?random=3",
     nuance: "Biased", likeCount: "45k",
     lensData: {
       raw: { title: "TikTok vs UMG: The silent library is hurting emerging artists most.", summary: "Click the headline above to read the full story and analysis..." },
@@ -37,7 +37,7 @@ export const stories: Story[] = [
   {
     category: "Movies", color: "indigo", source: "Deadline", time: "4h ago",
     title: "A24's new horror marketing strategy is terrifyingly effective.",
-    img: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=2670&auto=format&fit=crop",
+    img: "https://picsum.photos/800/1200?random=4",
     nuance: null, likeCount: "67k",
     lensData: {
       raw: { title: "A24's new horror marketing strategy is terrifyingly effective.", summary: "Click the headline above to read the full story and analysis..." },
@@ -48,7 +48,7 @@ export const stories: Story[] = [
   {
     category: "Streaming", color: "red", source: "The Verge", time: "5h ago",
     title: "Netflix password crackdown results are in: Subscribers represent huge spike.",
-    img: "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?q=80&w=2669&auto=format&fit=crop",
+    img: "https://picsum.photos/800/1200?random=5",
     nuance: "Data Dispute", likeCount: "32k",
     lensData: {
       raw: { title: "Netflix password crackdown results are in: Subscribers represent huge spike.", summary: "Click the headline above to read the full story and analysis..." },
@@ -59,7 +59,7 @@ export const stories: Story[] = [
   {
     category: "Food", color: "orange", source: "Eater", time: "2h ago",
     title: "The $18 Smoothie: Why inflation hit the wellness industry hardest.",
-    img: "https://images.unsplash.com/photo-1620916297397-a4a5402a3c6c?q=80&w=2574&auto=format&fit=crop",
+    img: "https://picsum.photos/800/1200?random=6",
     nuance: "High Nuance", likeCount: "28k",
     lensData: {
       raw: { title: "The $18 Smoothie: Why inflation hit the wellness industry hardest.", summary: "Click the headline above to read the full story and analysis..." },
@@ -70,7 +70,7 @@ export const stories: Story[] = [
   {
     category: "Tech", color: "blue", source: "Wired", time: "5h ago",
     title: "Lab-grown meat hits grocery shelves in Singapore: Is the US next?",
-    img: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?q=80&w=2670&auto=format&fit=crop",
+    img: "https://picsum.photos/800/1200?random=7",
     nuance: "Safety Debate", likeCount: "61k",
     lensData: {
       raw: { title: "Lab-grown meat hits grocery shelves in Singapore: Is the US next?", summary: "Click the headline above to read the full story and analysis..." },
@@ -81,7 +81,7 @@ export const stories: Story[] = [
   {
     category: "Safety", color: "red", source: "CityLab", time: "1h ago",
     title: "New AI surveillance in subways: Safety breakthrough or privacy nightmare?",
-    img: "https://images.unsplash.com/photo-1517154596051-c63233f191b8?q=80&w=2574&auto=format&fit=crop",
+    img: "https://picsum.photos/800/1200?random=8",
     nuance: "High Controversy", likeCount: "18k",
     lensData: {
       raw: { title: "New AI surveillance in subways: Safety breakthrough or privacy nightmare?", summary: "Click the headline above to read the full story and analysis..." },
@@ -92,7 +92,7 @@ export const stories: Story[] = [
   {
     category: "Traffic", color: "yellow", source: "Urbanist", time: "5h ago",
     title: "Congestion Pricing starts next month: How it impacts your commute.",
-    img: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=2621&auto=format&fit=crop",
+    img: "https://picsum.photos/800/1200?random=9",
     nuance: "Polarizing", likeCount: "31k",
     lensData: {
       raw: { title: "Congestion Pricing starts next month: How it impacts your commute.", summary: "Click the headline above to read the full story and analysis..." },
@@ -103,7 +103,7 @@ export const stories: Story[] = [
   {
     category: "Gaming", color: "green", source: "IGN", time: "7h ago",
     title: "Twitch's new payout model causes mass exodus of top streamers.",
-    img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2670&auto=format&fit=crop",
+    img: "https://picsum.photos/800/1200?random=10",
     nuance: null, likeCount: "55k",
     lensData: {
       raw: { title: "Twitch's new payout model causes mass exodus of top streamers.", summary: "Click the headline above to read the full story and analysis..." },
@@ -114,12 +114,12 @@ export const stories: Story[] = [
 ];
 
 export const discoverItems: DiscoverItem[] = [
-  { title: "Matcha prices soar 200% globally.", category: "Food", img: "https://images.unsplash.com/photo-1556910103-1c02745a30bf?q=80&w=2670&auto=format&fit=crop", trend: "Trending" },
-  { title: "Subway surfing crackdown.", category: "Safety", img: "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?q=80&w=2670&auto=format&fit=crop", trend: null },
-  { title: "New VR headset sells out in minutes.", category: "Tech", img: "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?q=80&w=2678&auto=format&fit=crop", trend: "Hot" },
-  { title: "The best ramen spots in NYC right now.", category: "Food", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=2670&auto=format&fit=crop", trend: null },
-  { title: "Indie sleaze fashion return confirmed.", category: "Culture", img: "https://images.unsplash.com/photo-1529139574466-a302d20525a9?q=80&w=2670&auto=format&fit=crop", trend: "Viral" },
-  { title: "SpaceX launches new satellite network.", category: "Tech", img: "https://images.unsplash.com/photo-1517976487492-5750f3195933?q=80&w=2670&auto=format&fit=crop", trend: null }
+  { title: "Matcha prices soar 200% globally.", category: "Food", img: "https://picsum.photos/800/600?random=11", trend: "Trending" },
+  { title: "Subway surfing crackdown.", category: "Safety", img: "https://picsum.photos/800/600?random=12", trend: null },
+  { title: "New VR headset sells out in minutes.", category: "Tech", img: "https://picsum.photos/800/600?random=13", trend: "Hot" },
+  { title: "The best ramen spots in NYC right now.", category: "Food", img: "https://picsum.photos/800/600?random=14", trend: null },
+  { title: "Indie sleaze fashion return confirmed.", category: "Culture", img: "https://picsum.photos/800/600?random=15", trend: "Viral" },
+  { title: "SpaceX launches new satellite network.", category: "Tech", img: "https://picsum.photos/800/600?random=16", trend: null }
 ];
 
 export const aiContexts: Record<string, AIContext> = {

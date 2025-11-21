@@ -94,7 +94,7 @@ export function StoryReader({ story, isOpen, onClose }: StoryReaderProps) {
             <div className="bg-gray-900/40 p-4 rounded-xl border border-white/5 flex gap-4 active:bg-gray-900/60 transition-colors cursor-pointer">
               <div className="w-20 h-20 bg-gray-800 rounded-lg overflow-hidden flex-shrink-0">
                 <Image
-                  src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2670&auto=format&fit=crop"
+                  src="https://picsum.photos/400/400?random=23"
                   alt="Related"
                   width={80}
                   height={80}

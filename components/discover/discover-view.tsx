@@ -69,7 +69,7 @@ export function DiscoverView({ onOpenStory }: DiscoverViewProps) {
 
         <div className="mb-8 relative h-32 rounded-2xl overflow-hidden border border-white/10 group cursor-pointer">
           <Image
-            src="https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=2670&auto=format&fit=crop"
+            src="https://picsum.photos/800/400?random=20"
             alt="Live Pulse"
             fill
             className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
