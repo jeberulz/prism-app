@@ -30,5 +30,35 @@ export interface AIContext {
   sentiment: string;
   bias: string;
   summary: string;
+  atAGlance?: string;
+  commonGround?: string[];
+  officialSource?: {
+    title: string;
+    url: string;
+    source: string;
+  };
+  coreDivergence?: {
+    title: string;
+    description: string;
+  };
+  perspectives?: {
+    left: {
+      title: string;
+      text: string;
+      source: string;
+    };
+    right: {
+      title: string;
+      text: string;
+      source: string;
+    };
+  };
+  languageAnalysis?: {
+    term: string;
+    type: string;
+    percentage: number;
+    usedBy: string;
+    color: 'blue' | 'purple';
+  }[];
 }
 

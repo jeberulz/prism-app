@@ -123,10 +123,250 @@ export const discoverItems: DiscoverItem[] = [
 ];
 
 export const aiContexts: Record<string, AIContext> = {
-  "Entertainment": { subtitle: "Analyzing Cultural Impact", sentiment: "Mixed", bias: "Slightly Negative", summary: "Current discourse is heavily polarized. While fanbase engagement is at an all-time high, critical reception suggests potential burnout regarding this topic." },
-  "Food": { subtitle: "Analyzing Market Trends", sentiment: "Positive", bias: "Neutral", summary: "This trend is driven by economic factors (inflation) rather than taste. Social sentiment is sympathetic, with high engagement on cost-saving alternatives." },
-  "Tech": { subtitle: "Analyzing Innovation Cycle", sentiment: "Cautious", bias: "Tech-Optimist", summary: "Innovation is praised, but privacy concerns are dominating the narrative. Regulatory discussions are heating up in the EU and California." },
-  "Safety": { subtitle: "Analyzing Public Sentiment", sentiment: "Negative", bias: "Alarmist", summary: "Fear-based engagement is driving visibility. Data suggests the actual incident rate is lower than perceived, but viral clips are skewing public perception." },
-  "Default": { subtitle: "Analyzing Context", sentiment: "Neutral", bias: "None Detected", summary: "This topic is currently developing. Early indicators suggest a moderate impact on the general discourse with steady engagement metrics." }
+  "Entertainment": {
+    subtitle: "Analyzing Cultural Impact",
+    sentiment: "Mixed",
+    bias: "Slightly Negative",
+    summary: "Current discourse is heavily polarized. While fanbase engagement is at an all-time high, critical reception suggests potential burnout regarding this topic.",
+    atAGlance: "The entertainment industry is experiencing a significant shift in how content is consumed and monetized. Recent controversies around AI-generated content and streaming platform disputes are reshaping the landscape.",
+    commonGround: [
+      "Fan engagement metrics are at record highs across platforms.",
+      "Both creators and platforms are seeking fair revenue distribution.",
+      "AI technology is becoming a central point of industry discussion."
+    ],
+    officialSource: {
+      title: "Industry Report (PDF)",
+      url: "#",
+      source: "Entertainment Weekly"
+    },
+    coreDivergence: {
+      title: "Sources disagree on whether 'Dynamic Pricing' is a tool for efficiency (Industry View) or exploitation (Consumer View).",
+      description: "The fundamental disagreement centers on the interpretation of pricing strategies and their impact on consumers."
+    },
+    perspectives: {
+      left: {
+        title: "CONSUMER RIGHTS",
+        text: "The monopoly allows Live Nation to bully venues and charge junk fees with no alternative for fans.",
+        source: "Vo: Vice"
+      },
+      right: {
+        title: "MARKET/INDUSTRY",
+        text: "Breaking up the company won't lower prices. High demand and scalpers are the real issue.",
+        source: "WSCNBC"
+      }
+    },
+    languageAnalysis: [
+      {
+        term: "Extortion",
+        type: "Loaded Language",
+        percentage: 75,
+        usedBy: "Used by Consumer Orgs",
+        color: "blue"
+      },
+      {
+        term: "Market Value",
+        type: "Euphemism",
+        percentage: 80,
+        usedBy: "Used by Industry",
+        color: "purple"
+      }
+    ]
+  },
+  "Food": {
+    subtitle: "Analyzing Market Trends",
+    sentiment: "Positive",
+    bias: "Neutral",
+    summary: "This trend is driven by economic factors (inflation) rather than taste. Social sentiment is sympathetic, with high engagement on cost-saving alternatives.",
+    atAGlance: "Food prices have surged globally, with wellness and specialty items seeing the highest increases. Consumers are adapting by seeking alternatives and sharing cost-saving strategies.",
+    commonGround: [
+      "Inflation has affected food prices across all categories.",
+      "Consumers are actively seeking budget-friendly alternatives.",
+      "Social media is amplifying cost-saving tips and recipes."
+    ],
+    officialSource: {
+      title: "Market Analysis (PDF)",
+      url: "#",
+      source: "Food Industry Report"
+    },
+    coreDivergence: {
+      title: "Sources disagree on whether price increases are driven by inflation (Economic View) or corporate greed (Consumer View).",
+      description: "The debate centers on the root cause of rising food costs."
+    },
+    perspectives: {
+      left: {
+        title: "CONSUMER RIGHTS",
+        text: "Brands are marking up products simply because they are labeled 'healthy'. Basic ingredients haven't risen that much.",
+        source: "Consumer Reports"
+      },
+      right: {
+        title: "MARKET/INDUSTRY",
+        text: "Supply chain disruptions and increased demand for premium ingredients drive costs. It's basic economics, not exploitation.",
+        source: "Food Industry Weekly"
+      }
+    },
+    languageAnalysis: [
+      {
+        term: "Wellness Tax",
+        type: "Loaded Language",
+        percentage: 70,
+        usedBy: "Used by Consumer Orgs",
+        color: "blue"
+      },
+      {
+        term: "Premium Pricing",
+        type: "Euphemism",
+        percentage: 75,
+        usedBy: "Used by Industry",
+        color: "purple"
+      }
+    ]
+  },
+  "Tech": {
+    subtitle: "Analyzing Innovation Cycle",
+    sentiment: "Cautious",
+    bias: "Tech-Optimist",
+    summary: "Innovation is praised, but privacy concerns are dominating the narrative. Regulatory discussions are heating up in the EU and California.",
+    atAGlance: "Breakthrough technologies are emerging rapidly, but regulatory frameworks are struggling to keep pace. Privacy and ethical concerns are central to public discourse.",
+    commonGround: [
+      "Innovation is advancing faster than regulation.",
+      "Privacy concerns are shared across demographics.",
+      "Both industry and regulators seek balanced solutions."
+    ],
+    officialSource: {
+      title: "Regulatory Framework (PDF)",
+      url: "#",
+      source: "Tech Policy Institute"
+    },
+    coreDivergence: {
+      title: "Sources disagree on whether AI surveillance enhances safety (Security View) or violates privacy (Privacy View).",
+      description: "The core debate is about the trade-off between security and individual privacy rights."
+    },
+    perspectives: {
+      left: {
+        title: "CONSUMER RIGHTS",
+        text: "Mass surveillance creates a chilling effect and violates fundamental privacy rights. The technology is being deployed without proper oversight.",
+        source: "Privacy Watch"
+      },
+      right: {
+        title: "MARKET/INDUSTRY",
+        text: "AI surveillance prevents crime and saves lives. The technology is sophisticated enough to respect privacy while enhancing security.",
+        source: "Tech Security Review"
+      }
+    },
+    languageAnalysis: [
+      {
+        term: "Surveillance State",
+        type: "Loaded Language",
+        percentage: 65,
+        usedBy: "Used by Consumer Orgs",
+        color: "blue"
+      },
+      {
+        term: "Smart Security",
+        type: "Euphemism",
+        percentage: 70,
+        usedBy: "Used by Industry",
+        color: "purple"
+      }
+    ]
+  },
+  "Safety": {
+    subtitle: "Analyzing Public Sentiment",
+    sentiment: "Negative",
+    bias: "Alarmist",
+    summary: "Fear-based engagement is driving visibility. Data suggests the actual incident rate is lower than perceived, but viral clips are skewing public perception.",
+    atAGlance: "Public safety concerns are heightened due to viral content, though statistical data shows mixed trends. The gap between perception and reality is significant.",
+    commonGround: [
+      "Public safety is a priority for all stakeholders.",
+      "Data collection and analysis methods vary widely.",
+      "Transparency in reporting is universally requested."
+    ],
+    officialSource: {
+      title: "Safety Report (PDF)",
+      url: "#",
+      source: "Public Safety Bureau"
+    },
+    coreDivergence: {
+      title: "Sources disagree on whether incidents are increasing (Media View) or perception is distorted by viral content (Data View).",
+      description: "The debate centers on whether the problem is real or amplified by social media."
+    },
+    perspectives: {
+      left: {
+        title: "CONSUMER RIGHTS",
+        text: "Viral videos expose real dangers that official statistics downplay. The incidents are happening more frequently than reported.",
+        source: "Safety Watch"
+      },
+      right: {
+        title: "MARKET/INDUSTRY",
+        text: "Data shows incidents are actually decreasing. Viral clips create false perception. The real issue is media amplification.",
+        source: "Data Analytics Inc"
+      }
+    },
+    languageAnalysis: [
+      {
+        term: "Epidemic",
+        type: "Loaded Language",
+        percentage: 60,
+        usedBy: "Used by Consumer Orgs",
+        color: "blue"
+      },
+      {
+        term: "Isolated Incidents",
+        type: "Euphemism",
+        percentage: 65,
+        usedBy: "Used by Industry",
+        color: "purple"
+      }
+    ]
+  },
+  "Default": {
+    subtitle: "Analyzing Context",
+    sentiment: "Neutral",
+    bias: "None Detected",
+    summary: "This topic is currently developing. Early indicators suggest a moderate impact on the general discourse with steady engagement metrics.",
+    atAGlance: "This story is still developing. Early analysis suggests moderate public interest with steady engagement across platforms.",
+    commonGround: [
+      "The story is actively being covered by multiple sources.",
+      "Public interest is steady but not yet peaked.",
+      "More information is expected to emerge."
+    ],
+    officialSource: {
+      title: "Source Document (PDF)",
+      url: "#",
+      source: "Primary Source"
+    },
+    coreDivergence: {
+      title: "Sources disagree on the primary cause and potential solutions.",
+      description: "Multiple perspectives are emerging as the story develops."
+    },
+    perspectives: {
+      left: {
+        title: "CONSUMER RIGHTS",
+        text: "The current system disadvantages consumers and needs reform.",
+        source: "Consumer Voice"
+      },
+      right: {
+        title: "MARKET/INDUSTRY",
+        text: "Market forces are working as intended. Changes could disrupt efficiency.",
+        source: "Industry Report"
+      }
+    },
+    languageAnalysis: [
+      {
+        term: "Exploitation",
+        type: "Loaded Language",
+        percentage: 50,
+        usedBy: "Used by Consumer Orgs",
+        color: "blue"
+      },
+      {
+        term: "Market Dynamics",
+        type: "Euphemism",
+        percentage: 55,
+        usedBy: "Used by Industry",
+        color: "purple"
+      }
+    ]
+  }
 };
 
