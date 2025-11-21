@@ -60,5 +60,21 @@ export interface AIContext {
     usedBy: string;
     color: 'blue' | 'purple';
   }[];
+  sourceCredibility?: {
+    methodology: string;
+    sources: {
+      name: string;
+      credibilityScore: number;
+      trackRecord: {
+        factCheckAccuracy: number;
+        retractionRate: number;
+      };
+      biasPattern: {
+        political: 'left' | 'center' | 'right';
+        economic: 'progressive' | 'moderate' | 'conservative';
+      };
+      lastVerified: string;
+    }[];
+  };
 }
 

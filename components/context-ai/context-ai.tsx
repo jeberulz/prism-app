@@ -1,6 +1,6 @@
 'use client';
 
-import { X, Sparkles, Scale, CheckCircle2, FileText, Send, GitBranch, Eye } from 'lucide-react';
+import { X, Sparkles, Scale, CheckCircle2, FileText, Send, GitBranch, Eye, Shield, TrendingUp, Info, ChevronDown, ChevronUp } from 'lucide-react';
 import { aiContexts } from '@/data/stories';
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
@@ -26,6 +26,8 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [expandedCredibility, setExpandedCredibility] = useState<string | null>(null);
+  const [methodologyExpanded, setMethodologyExpanded] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -247,6 +249,129 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
                   </div>
                 </button>
               )}
+
+              {/* Source Credibility Scoring */}
+              {data.sourceCredibility && (
+                <div className="space-y-4">
+                  <div className="bg-gray-900/60 rounded-2xl p-5 border border-white/5">
+                    <div className="flex items-center gap-2 mb-4">
+                      <Shield size={16} className="text-purple-400" />
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400">SOURCE CREDIBILITY</h4>
+                    </div>
+
+                    {/* Methodology Toggle */}
+                    <button
+                      onClick={() => setMethodologyExpanded(!methodologyExpanded)}
+                      className="w-full flex items-center justify-between p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/5 transition-colors mb-4"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Info size={14} className="text-gray-400" />
+                        <span className="text-xs font-medium text-gray-300">Scoring Methodology</span>
+                      </div>
+                      {methodologyExpanded ? (
+                        <ChevronUp size={16} className="text-gray-400" />
+                      ) : (
+                        <ChevronDown size={16} className="text-gray-400" />
+                      )}
+                    </button>
+
+                    {methodologyExpanded && (
+                      <div className="mb-4 p-3 bg-white/5 rounded-lg border border-white/5">
+                        <p className="text-xs text-gray-300 leading-relaxed">
+                          {data.sourceCredibility.methodology}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Source Cards */}
+                    <div className="space-y-3">
+                      {data.sourceCredibility.sources.map((source, index) => {
+                        const scoreColor = source.credibilityScore >= 80 ? 'text-green-400' : source.credibilityScore >= 65 ? 'text-yellow-400' : 'text-red-400';
+                        const scoreBgColor = source.credibilityScore >= 80 ? 'bg-green-500/20 border-green-500/30' : source.credibilityScore >= 65 ? 'bg-yellow-500/20 border-yellow-500/30' : 'bg-red-500/20 border-red-500/30';
+                        const isExpanded = expandedCredibility === source.name;
+                        
+                        return (
+                          <div
+                            key={index}
+                            className={cn(
+                              "rounded-xl border transition-all",
+                              scoreBgColor,
+                              isExpanded && "border-opacity-50"
+                            )}
+                          >
+                            <button
+                              onClick={() => setExpandedCredibility(isExpanded ? null : source.name)}
+                              className="w-full p-4 flex items-center justify-between"
+                            >
+                              <div className="flex items-center gap-3 flex-1 text-left">
+                                <div className="flex flex-col items-center min-w-[50px]">
+                                  <div className={cn("text-2xl font-bold", scoreColor)}>
+                                    {source.credibilityScore}
+                                  </div>
+                                  <div className="text-[9px] text-gray-400 uppercase tracking-wider">Score</div>
+                                </div>
+                                <div className="flex-1">
+                                  <div className="text-sm font-semibold text-white mb-1">{source.name}</div>
+                                  <div className="flex items-center gap-3 text-xs text-gray-400">
+                                    <span className="flex items-center gap-1">
+                                      <TrendingUp size={12} />
+                                      {source.trackRecord.factCheckAccuracy}% accuracy
+                                    </span>
+                                    <span>•</span>
+                                    <span>{source.trackRecord.retractionRate}% retractions</span>
+                                  </div>
+                                </div>
+                              </div>
+                              {isExpanded ? (
+                                <ChevronUp size={16} className="text-gray-400 ml-2" />
+                              ) : (
+                                <ChevronDown size={16} className="text-gray-400 ml-2" />
+                              )}
+                            </button>
+
+                            {isExpanded && (
+                              <div className="px-4 pb-4 space-y-3 border-t border-white/5 pt-3">
+                                {/* Track Record */}
+                                <div className="space-y-2">
+                                  <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Track Record</div>
+                                  <div className="grid grid-cols-2 gap-2">
+                                    <div className="bg-white/5 rounded-lg p-2">
+                                      <div className="text-xs text-gray-400 mb-1">Fact-Check Accuracy</div>
+                                      <div className="text-sm font-semibold text-white">{source.trackRecord.factCheckAccuracy}%</div>
+                                    </div>
+                                    <div className="bg-white/5 rounded-lg p-2">
+                                      <div className="text-xs text-gray-400 mb-1">Retraction Rate</div>
+                                      <div className="text-sm font-semibold text-white">{source.trackRecord.retractionRate}%</div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Bias Pattern */}
+                                <div className="space-y-2">
+                                  <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Bias Pattern</div>
+                                  <div className="flex gap-2 flex-wrap">
+                                    <span className="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-gray-300">
+                                      {source.biasPattern.political.charAt(0).toUpperCase() + source.biasPattern.political.slice(1)}
+                                    </span>
+                                    <span className="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-gray-300">
+                                      {source.biasPattern.economic.charAt(0).toUpperCase() + source.biasPattern.economic.slice(1)}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                {/* Last Verified */}
+                                <div className="text-xs text-gray-500">
+                                  Last verified: {new Date(source.lastVerified).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
             </>
           )}
 
@@ -276,10 +401,25 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
                     <p className="text-sm text-gray-200 leading-relaxed mb-3">
                       {data.perspectives.left.text}
                     </p>
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20">
-                      <span className="text-[10px] font-medium text-blue-300">
-                        {data.perspectives.left.source}
-                      </span>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20">
+                        <span className="text-[10px] font-medium text-blue-300">
+                          {data.perspectives.left.source}
+                        </span>
+                      </div>
+                      {data.sourceCredibility && (() => {
+                        const source = data.sourceCredibility.sources.find(s => s.name === data.perspectives?.left.source);
+                        if (source) {
+                          const scoreColor = source.credibilityScore >= 80 ? 'text-green-400 border-green-500/30 bg-green-500/10' : source.credibilityScore >= 65 ? 'text-yellow-400 border-yellow-500/30 bg-yellow-500/10' : 'text-red-400 border-red-500/30 bg-red-500/10';
+                          return (
+                            <div className={cn("inline-flex items-center gap-1 px-2 py-0.5 rounded-full border text-[10px] font-medium", scoreColor)}>
+                              <Shield size={10} />
+                              {source.credibilityScore}
+                            </div>
+                          );
+                        }
+                        return null;
+                      })()}
                     </div>
                   </div>
 
@@ -291,10 +431,25 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
                     <p className="text-sm text-gray-200 leading-relaxed mb-3">
                       {data.perspectives.right.text}
                     </p>
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-500/10 border border-purple-500/20">
-                      <span className="text-[10px] font-medium text-purple-300">
-                        {data.perspectives.right.source}
-                      </span>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-500/10 border border-purple-500/20">
+                        <span className="text-[10px] font-medium text-purple-300">
+                          {data.perspectives.right.source}
+                        </span>
+                      </div>
+                      {data.sourceCredibility && (() => {
+                        const source = data.sourceCredibility.sources.find(s => s.name === data.perspectives?.right.source);
+                        if (source) {
+                          const scoreColor = source.credibilityScore >= 80 ? 'text-green-400 border-green-500/30 bg-green-500/10' : source.credibilityScore >= 65 ? 'text-yellow-400 border-yellow-500/30 bg-yellow-500/10' : 'text-red-400 border-red-500/30 bg-red-500/10';
+                          return (
+                            <div className={cn("inline-flex items-center gap-1 px-2 py-0.5 rounded-full border text-[10px] font-medium", scoreColor)}>
+                              <Shield size={10} />
+                              {source.credibilityScore}
+                            </div>
+                          );
+                        }
+                        return null;
+                      })()}
                     </div>
                   </div>
                 </div>
