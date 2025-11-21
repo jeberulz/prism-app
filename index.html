@@ -1,0 +1,974 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=no">
+    <title>Prism - Gen Z Pulse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Hide Scrollbar */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #050505;
+        }
+
+        /* Noise Texture */
+        .bg-noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Vertical Snap Scroll Logic */
+        .snap-container {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100%;
+            scroll-behavior: smooth;
+            position: absolute;
+            inset: 0;
+        }
+
+        .snap-item {
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            height: 100%;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .slide-up-panel {
+            animation: slideUpPanel 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .slide-down-panel {
+            animation: slideDownPanel 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideUpPanel {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDownPanel {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(100%);
+            }
+        }
+
+        /* Heart Animation */
+        @keyframes heartPop {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.3);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .heart-pop i,
+        .heart-pop svg {
+            animation: heartPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Glass Utilities */
+        .glass-nav {
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .glass-panel {
+            background: rgba(18, 18, 18, 0.98);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .text-shadow {
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Tab Utilities */
+        .tab-content {
+            display: none;
+            height: 100%;
+            width: 100%;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Prism Gradient Text */
+        .prism-text {
+            background: linear-gradient(to right, #60a5fa, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+
+<body class="overflow-hidden flex justify-center text-white bg-[#050505] w-full h-screen selection:bg-purple-500/30">
+    <div class="bg-noise"></div>
+
+    <!-- App Container -->
+    <div
+        class="w-full h-full md:max-w-[420px] md:h-[95vh] md:my-auto md:rounded-[32px] relative overflow-hidden bg-black shadow-2xl border-gray-800 md:border ring-1 ring-white/10 z-10">
+
+        <!-- ================= VIEW: HOME (FEED) ================= -->
+        <div id="view-home" class="tab-content active h-full relative group/home">
+
+            <!-- Top Navigation (Floating) -->
+            <header
+                class="absolute top-0 left-0 right-0 z-30 pt-6 pb-4 flex flex-col gap-3 justify-center items-center text-sm font-medium text-white/60 pointer-events-none transition-opacity duration-300 bg-gradient-to-b from-black/80 to-transparent">
+
+                <!-- Prism Lens Toggle -->
+                <div
+                    class="pointer-events-auto flex items-center gap-1 bg-black/40 backdrop-blur-xl rounded-full p-1 border border-white/10 shadow-lg transform scale-90 origin-top">
+                    <button onclick="setPrismLens('raw')"
+                        class="lens-btn active px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all text-white bg-white/10 border border-white/5 shadow-inner"
+                        data-lens="raw">Raw</button>
+                    <button onclick="setPrismLens('explained')"
+                        class="lens-btn px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all text-gray-400 hover:text-white hover:bg-white/5"
+                        data-lens="explained">Explained</button>
+                    <button onclick="setPrismLens('debunked')"
+                        class="lens-btn px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all text-gray-400 hover:text-white hover:bg-white/5"
+                        data-lens="debunked">Debunked</button>
+                </div>
+
+                <div
+                    class="flex gap-6 pointer-events-auto bg-black/20 backdrop-blur-sm rounded-full px-4 py-1.5 border border-white/5 hidden">
+                    <button id="btn-foryou" onclick="switchHomeFeed('foryou')"
+                        class="text-white font-semibold drop-shadow-md relative transition-colors">
+                        For You
+                        <div id="indicator-foryou"
+                            class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full transition-transform duration-300">
+                        </div>
+                    </button>
+                    <button id="btn-following" onclick="switchHomeFeed('following')"
+                        class="hover:text-white transition-colors text-white/60 relative drop-shadow-md">
+                        Following
+                        <div id="indicator-following"
+                            class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full scale-0 transition-transform duration-300">
+                        </div>
+                    </button>
+                </div>
+                <!-- Search Button -->
+                <button onclick="navigateToSearch()"
+                    class="absolute right-5 top-6 pointer-events-auto p-2.5 rounded-full bg-black/30 backdrop-blur-md active:scale-95 transition-transform border border-white/10 hover:bg-white/10">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                        data-lucide="search" class="lucide lucide-search text-white">
+                        <path d="m21 21-4.34-4.34"></path>
+                        <circle cx="11" cy="11" r="8"></circle>
+                    </svg>
+                </button>
+            </header>
+
+            <!-- Vertical Feed Container -->
+            <div class="w-full h-full relative">
+                <main class="snap-container no-scrollbar w-full h-full z-10" id="feed-container">
+                    <!-- Content injected by JS -->
+                </main>
+            </div>
+        </div>
+
+        <!-- ================= VIEW: DISCOVER ================= -->
+        <div id="view-discover" class="tab-content h-full bg-black text-white overflow-hidden flex flex-col pb-20">
+            <div class="px-6 pt-12 pb-4 sticky top-0 bg-black/80 backdrop-blur-md z-20 border-b border-white/10">
+                <div class="flex justify-between items-center mb-4">
+                    <h1 class="text-2xl font-semibold tracking-tight">Discover</h1>
+                    <button
+                        class="text-[10px] font-bold uppercase tracking-wider bg-gradient-to-r from-blue-500 to-purple-500 px-3 py-1.5 rounded-full shadow-[0_0_15px_rgba(168,85,247,0.4)] active:scale-95 transition-transform flex items-center gap-1">
+                        <svg data-lucide="shuffle" width="12" height="12"></svg> Surprise Me
+                    </button>
+                </div>
+                <div class="relative group">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                        data-lucide="search"
+                        class="lucide lucide-search absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-blue-400 transition-colors">
+                        <path d="m21 21-4.34-4.34"></path>
+                        <circle cx="11" cy="11" r="8"></circle>
+                    </svg>
+                    <input id="discover-search-input" type="text" placeholder="Search topics, sources..."
+                        class="w-full bg-gray-900 border border-gray-800 text-sm text-white rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all placeholder:text-gray-600">
+                </div>
+            </div>
+            <div class="overflow-y-auto no-scrollbar flex-1 px-6 pt-4">
+                <!-- Categories -->
+                <div class="flex gap-3 mb-6 overflow-x-auto no-scrollbar pb-2">
+                    <button onclick="filterDiscover('All')"
+                        class="bg-white text-black border border-white px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-transform active:scale-95">All</button>
+                    <button onclick="filterDiscover('Music')"
+                        class="bg-gray-800 border border-gray-700 px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap hover:bg-gray-700 transition-colors">🎵
+                        Music</button>
+                    <button onclick="filterDiscover('Food')"
+                        class="bg-gray-800 border border-gray-700 px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap hover:bg-gray-700 transition-colors">🍜
+                        Food</button>
+                    <button onclick="filterDiscover('Tech')"
+                        class="bg-gray-800 border border-gray-700 px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap hover:bg-gray-700 transition-colors">🤖
+                        Tech</button>
+                </div>
+
+                <!-- Trending Pulse Visual -->
+                <div class="mb-8 relative h-32 rounded-2xl overflow-hidden border border-white/10 group cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=2670&auto=format&fit=crop"
+                        class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-r from-purple-900/80 to-blue-900/80 mix-blend-multiply">
+                    </div>
+                    <div class="absolute inset-0 flex flex-col justify-center items-center text-center p-4">
+                        <span
+                            class="text-[10px] font-bold uppercase tracking-widest text-blue-300 mb-1 animate-pulse">Live
+                            Pulse</span>
+                        <h3 class="text-xl font-bold text-white leading-tight mb-1">Global Internet Outage</h3>
+                        <p class="text-xs text-gray-300">Affecting 12 countries • 45k posts/min</p>
+                    </div>
+                </div>
+
+                <h3 class="text-xs font-medium text-gray-500 uppercase tracking-widest mb-3">Trending Now</h3>
+                <div id="discover-grid" class="grid grid-cols-2 gap-4 pb-8">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+        </div>
+        <!-- ================= VIEW: PROFILE ================= -->
+        <div id="view-profile" class="tab-content h-full bg-black text-white overflow-hidden flex flex-col pb-20">
+            <div class="flex-1 overflow-y-auto no-scrollbar px-6 pt-12">
+                <div class="flex justify-end mb-4">
+                    <button class="p-2 text-gray-400 hover:text-white"><svg xmlns="http://www.w3.org/2000/svg"
+                            width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="settings"
+                            class="lucide lucide-settings w-6 h-6">
+                            <path
+                                d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z">
+                            </path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg></button>
+                </div>
+                <div class="flex flex-col items-center mb-8">
+                    <div class="w-24 h-24 rounded-full border-2 border-gray-800 p-1 mb-4 relative group cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&amp;w=1964&amp;auto=format&amp;fit=crop"
+                            class="w-full h-full rounded-full object-cover" alt="Profile">
+                        <div
+                            class="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round" data-lucide="camera"
+                                class="lucide lucide-camera text-white w-6 h-6">
+                                <path
+                                    d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z">
+                                </path>
+                                <circle cx="12" cy="13" r="3"></circle>
+                            </svg>
+                        </div>
+                    </div>
+                    <h2 class="text-xl font-semibold tracking-tight">Jordan Lee</h2>
+                    <span class="text-sm text-gray-500">@jordy_updates</span>
+                    <div class="flex gap-6 mt-4 text-sm">
+                        <div class="text-center"><span class="font-bold text-white">248</span> <span
+                                class="text-gray-500">Read</span></div>
+                        <div class="text-center"><span class="font-bold text-white">52</span> <span
+                                class="text-gray-500">Saved</span></div>
+                        <div class="text-center"><span class="font-bold text-white">12k</span> <span
+                                class="text-gray-500">Followers</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-900/40 border border-gray-800 rounded-2xl p-5 mb-6">
+                    <div class="flex justify-between items-end mb-3">
+                        <h3 class="text-sm font-medium text-gray-200">Interest Profile</h3>
+                        <span class="text-xs text-blue-400">View Analysis</span>
+                    </div>
+                    <div class="w-full h-2 bg-gray-800 rounded-full overflow-hidden flex mb-2">
+                        <div class="h-full bg-purple-500" style="width: 45%"></div>
+                        <div class="h-full bg-orange-500" style="width: 30%"></div>
+                        <div class="h-full bg-blue-500" style="width: 25%"></div>
+                    </div>
+                    <div class="flex justify-between text-[10px] text-gray-500 uppercase tracking-widest mt-2">
+                        <span class="flex items-center gap-1">
+                            <div class="w-2 h-2 bg-purple-500 rounded-full"></div>Culture
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <div class="w-2 h-2 bg-orange-500 rounded-full"></div>Lifestyle
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <div class="w-2 h-2 bg-blue-500 rounded-full"></div>Tech
+                        </span>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-sm font-medium text-gray-400 uppercase tracking-widest px-1">Bookmarks</h3>
+                    <div class="bg-gray-900/30 rounded-xl p-4 border border-gray-800 flex gap-4 items-center">
+                        <div class="w-12 h-12 bg-gray-800 rounded-lg overflow-hidden flex-shrink-0">
+                            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&amp;w=2670&amp;auto=format&amp;fit=crop"
+                                class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-sm font-medium text-white truncate">Why algorithms favor controversy</h4>
+                            <p class="text-xs text-gray-500">Tech • 5m read</p>
+                        </div>
+                        <button class="text-gray-500"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-right"
+                                class="lucide lucide-chevron-right w-4 h-4">
+                                <path d="m9 18 6-6-6-6"></path>
+                            </svg></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= BOTTOM NAV ================= -->
+        <nav id="bottom-nav"
+            class="absolute bottom-0 left-0 right-0 h-[80px] z-30 glass-nav flex justify-around items-center border-t border-white/5 pb-2">
+            <div class="nav-item text-white flex flex-col items-center gap-1 cursor-pointer w-16" data-tab="home"
+                onclick="switchTab('view-home', this)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                    data-lucide="home" class="lucide lucide-home w-6 h-6 transition-all">
+                    <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path>
+                    <path
+                        d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z">
+                    </path>
+                </svg>
+                <span class="text-[10px] font-medium">Home</span>
+            </div>
+            <div class="nav-item text-gray-500 flex flex-col items-center gap-1 cursor-pointer w-16 hover:text-gray-300 transition-colors"
+                data-tab="discover" onclick="switchTab('view-discover', this)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                    data-lucide="compass" class="lucide lucide-compass w-6 h-6 transition-all">
+                    <path
+                        d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z">
+                    </path>
+                    <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+                <span class="text-[10px] font-medium">Discover</span>
+            </div>
+            <div class="nav-item text-gray-500 flex flex-col items-center gap-1 cursor-pointer w-16 hover:text-gray-300 transition-colors"
+                data-tab="profile" onclick="switchTab('view-profile', this)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                    data-lucide="user" class="lucide lucide-user w-6 h-6 transition-all">
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span class="text-[10px] font-medium">Profile</span>
+            </div>
+        </nav>
+
+        <!-- ================= OVERLAY: PRISM INTELLIGENCE (Context) ================= -->
+        <div id="context-overlay"
+            class="absolute inset-0 z-50 hidden flex flex-col justify-end transition-all duration-300">
+            <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity opacity-0"
+                id="context-backdrop" onclick="closeContextAI()"></div>
+
+            <div id="context-panel"
+                class="glass-panel w-full h-[70vh] rounded-t-[32px] transform translate-y-full transition-transform duration-400 flex flex-col overflow-hidden relative z-10 border-t border-white/20 shadow-2xl">
+                <!-- Handle -->
+                <div class="w-full flex justify-center pt-3 pb-1 cursor-pointer bg-transparent"
+                    onclick="closeContextAI()">
+                    <div class="w-12 h-1 bg-white/30 rounded-full"></div>
+                </div>
+                <!-- Content -->
+                <div class="px-6 pt-2 pb-4 flex items-center justify-between border-b border-white/5">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-[0_0_15px_rgba(168,85,247,0.5)]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round" data-lucide="sparkles"
+                                class="lucide lucide-sparkles text-white w-4 h-4">
+                                <path
+                                    d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z">
+                                </path>
+                                <path d="M20 2v4"></path>
+                                <path d="M22 4h-4"></path>
+                                <circle cx="4" cy="20" r="2"></circle>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold tracking-tight text-white">Prism Intelligence</h3>
+                            <p class="text-[10px] text-gray-400 font-medium" id="context-subtitle">Analyzing current
+                                topic...</p>
+                        </div>
+                    </div>
+                    <button onclick="closeContextAI()"
+                        class="p-2 bg-white/5 rounded-full hover:bg-white/10 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                            data-lucide="x" class="lucide lucide-x text-gray-400 w-5 h-5">
+                            <path d="M18 6 6 18"></path>
+                            <path d="m6 6 12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex-1 overflow-y-auto no-scrollbar p-6 space-y-6" id="context-body">
+                    <!-- Injected content -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= OVERLAY: FULL STORY READER ================= -->
+        <div id="story-reader" class="absolute inset-0 z-40 hidden flex flex-col bg-black overflow-hidden">
+            <!-- Reader Header -->
+            <div
+                class="absolute top-0 left-0 right-0 p-4 z-20 flex justify-between items-center bg-gradient-to-b from-black/90 via-black/50 to-transparent pointer-events-none">
+                <button onclick="closeStory()"
+                    class="pointer-events-auto p-3 bg-black/30 backdrop-blur-md rounded-full border border-white/10 text-white hover:bg-white/10 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                        data-lucide="chevron-down" class="lucide lucide-chevron-down w-6 h-6">
+                        <path d="m6 9 6 6 6-6"></path>
+                    </svg>
+                </button>
+                <div class="flex gap-3 pointer-events-auto">
+                    <button
+                        class="p-3 bg-black/30 backdrop-blur-md rounded-full border border-white/10 text-white hover:bg-white/10 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                            data-lucide="bookmark" class="lucide lucide-bookmark">
+                            <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path>
+                        </svg>
+                    </button>
+                    <button
+                        class="p-3 bg-black/30 backdrop-blur-md rounded-full border border-white/10 text-white hover:bg-white/10 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                            data-lucide="share-2" class="lucide lucide-share-2">
+                            <circle cx="18" cy="5" r="3"></circle>
+                            <circle cx="6" cy="12" r="3"></circle>
+                            <circle cx="18" cy="19" r="3"></circle>
+                            <line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line>
+                            <line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Reader Content -->
+            <div class="overflow-y-auto h-full no-scrollbar bg-[#050505]">
+                <div class="relative h-[55vh] w-full">
+                    <img id="reader-img" src="" class="w-full h-full object-cover" alt="Hero">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/20 to-transparent"></div>
+                </div>
+                <div class="px-6 -mt-16 relative z-10 pb-32">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span id="reader-tag"
+                            class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded bg-white/10 backdrop-blur-sm text-white border border-white/10"></span>
+                        <span id="reader-source" class="text-xs font-medium text-gray-300"></span>
+                    </div>
+                    <h1 id="reader-title" class="text-[26px] font-bold leading-[1.2] text-white mb-6 tracking-tight">
+                    </h1>
+
+                    <!-- Simulated Article Body -->
+                    <div class="space-y-5 text-gray-300 leading-relaxed text-[15px] font-light tracking-wide">
+                        <p id="reader-intro"
+                            class="first-letter:text-3xl first-letter:font-bold first-letter:text-white first-letter:mr-1 first-letter:float-left text-gray-200 font-normal">
+                            The rapid shift in consumer behavior has taken analysts by surprise. What started as a niche
+                            trend on social media has quickly evolved into a significant market force.
+                        </p>
+                        <p>
+                            "We haven't seen engagement metrics this high since 2019," notes a senior analyst from the
+                            firm. The data suggests a fundamental disconnect between traditional forecasting models and
+                            the actual pulse of the demographic.
+                        </p>
+                        <div class="my-8 border-l-[3px] border-purple-500 pl-5 py-1">
+                            <p class="text-white font-medium italic text-lg leading-snug">"It's not just a trend, it's a
+                                complete restructuring of value perception."</p>
+                        </div>
+                        <p>
+                            As the situation develops, experts warn that companies failing to adapt to this speed of
+                            information travel will be left behind. The viral nature of the phenomenon means reputation
+                            can be built or dismantled in hours, not weeks.
+                        </p>
+                        <p>
+                            Moving forward, the focus shifts to sustainability. Can this momentum be maintained, or is
+                            it another flash in the pan? Early indicators suggest the former.
+                        </p>
+                    </div>
+
+                    <div class="mt-12 pt-8 border-t border-white/10 flex flex-col gap-5">
+                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-widest">Related Coverage</h4>
+                        <div
+                            class="bg-gray-900/40 p-4 rounded-xl border border-white/5 flex gap-4 active:bg-gray-900/60 transition-colors cursor-pointer">
+                            <div class="w-20 h-20 bg-gray-800 rounded-lg overflow-hidden flex-shrink-0">
+                                <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&amp;w=2670&amp;auto=format&amp;fit=crop"
+                                    class="w-full h-full object-cover">
+                            </div>
+                            <div class="flex flex-col justify-center">
+                                <div class="text-[10px] text-purple-400 mb-1 font-medium uppercase tracking-wide">
+                                    Analysis</div>
+                                <div class="text-sm font-semibold text-white leading-snug">Why the algorithms favor
+                                    controversy over facts.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- App Scripts -->
+    <script>
+        // --- DATA: Stories ---
+        const stories = [
+            {
+                category: "Entertainment", color: "purple", source: "Rolling Stone", time: "1h ago",
+                title: "The Weeknd's AI vocals controversy sparks industry-wide legal battle.",
+                img: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2670&auto=format&fit=crop",
+                nuance: "Missing Context", likeCount: "124k",
+                lensData: {
+                    raw: { title: "The Weeknd's AI vocals controversy sparks industry-wide legal battle.", summary: "Click the headline above to read the full story and analysis..." },
+                    explained: { title: "Why The Weeknd is suing over AI voice clones.", summary: "Artists are fighting for the right to own their voice. This lawsuit could set a major precedent for AI copyright." },
+                    debunked: { title: "No, The Weeknd didn't sue OpenAI directly (yet).", summary: "The lawsuit is actually against a specific startup, not the major AI labs. It's a targeted strike, not a general ban." }
+                }
+            },
+            {
+                category: "Entertainment", color: "pink", source: "Variety", time: "2h ago",
+                title: "Euphoria Season 3 delayed again: HBO cites 'creative overhaul'.",
+                img: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=2525&auto=format&fit=crop",
+                nuance: null, likeCount: "89k",
+                lensData: {
+                    raw: { title: "Euphoria Season 3 delayed again: HBO cites 'creative overhaul'.", summary: "Click the headline above to read the full story and analysis..." },
+                    explained: { title: "Euphoria S3 is on hold to age up the characters.", summary: "HBO wants to move the show out of high school. The delay allows for a time-jump narrative." },
+                    debunked: { title: "Euphoria isn't cancelled, despite the rumors.", summary: "Social media claims of cancellation are false. Scripts are being rewritten, but production is confirmed." }
+                }
+            },
+            {
+                category: "Music", color: "purple", source: "Billboard", time: "3h ago",
+                title: "TikTok vs UMG: The silent library is hurting emerging artists most.",
+                img: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=2670&auto=format&fit=crop",
+                nuance: "Biased", likeCount: "45k",
+                lensData: {
+                    raw: { title: "TikTok vs UMG: The silent library is hurting emerging artists most.", summary: "Click the headline above to read the full story and analysis..." },
+                    explained: { title: "Why your favorite songs are gone from TikTok.", summary: "Universal Music Group pulled their catalog over royalty disputes. Small artists are losing their main discovery platform." },
+                    debunked: { title: "UMG isn't just 'greedy', TikTok pays very little.", summary: "While UMG is a giant, TikTok pays a fraction of what Spotify does per stream. It's a complex leverage battle." }
+                }
+            },
+            {
+                category: "Movies", color: "indigo", source: "Deadline", time: "4h ago",
+                title: "A24's new horror marketing strategy is terrifyingly effective.",
+                img: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=2670&auto=format&fit=crop",
+                nuance: null, likeCount: "67k",
+                lensData: {
+                    raw: { title: "A24's new horror marketing strategy is terrifyingly effective.", summary: "Click the headline above to read the full story and analysis..." },
+                    explained: { title: "How A24 uses viral stunts to sell scary movies.", summary: "From fake websites to real-life pranks, they build hype by blurring reality and fiction." },
+                    debunked: { title: "The 'viral' stunts are carefully paid ads.", summary: "It feels organic, but most of the 'fan theories' are seeded by marketing agencies. It's manufactured virality." }
+                }
+            },
+            {
+                category: "Streaming", color: "red", source: "The Verge", time: "5h ago",
+                title: "Netflix password crackdown results are in: Subscribers represent huge spike.",
+                img: "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?q=80&w=2669&auto=format&fit=crop",
+                nuance: "Data Dispute", likeCount: "32k",
+                lensData: {
+                    raw: { title: "Netflix password crackdown results are in: Subscribers represent huge spike.", summary: "Click the headline above to read the full story and analysis..." },
+                    explained: { title: "Stopping password sharing actually made Netflix money.", summary: "People complained, but then they signed up. It worked, and other streamers will likely follow." },
+                    debunked: { title: "Subscriber numbers are up, but satisfaction is down.", summary: "The 'spike' includes ad-tier signups. Long-term retention might suffer as prices keep rising." }
+                }
+            },
+            {
+                category: "Food", color: "orange", source: "Eater", time: "2h ago",
+                title: "The $18 Smoothie: Why inflation hit the wellness industry hardest.",
+                img: "https://images.unsplash.com/photo-1620916297397-a4a5402a3c6c?q=80&w=2574&auto=format&fit=crop",
+                nuance: "High Nuance", likeCount: "28k",
+                lensData: {
+                    raw: { title: "The $18 Smoothie: Why inflation hit the wellness industry hardest.", summary: "Click the headline above to read the full story and analysis..." },
+                    explained: { title: "Why healthy food is getting so expensive.", summary: "Supply chain issues + high demand for 'superfoods' = skyrocketing prices for your morning smoothie." },
+                    debunked: { title: "It's not just inflation, it's 'Wellness Tax'.", summary: "Brands are marking up products simply because they are labeled 'healthy'. Basic ingredients haven't risen that much." }
+                }
+            },
+            {
+                category: "Tech", color: "blue", source: "Wired", time: "5h ago",
+                title: "Lab-grown meat hits grocery shelves in Singapore: Is the US next?",
+                img: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?q=80&w=2670&auto=format&fit=crop",
+                nuance: "Safety Debate", likeCount: "61k",
+                lensData: {
+                    raw: { title: "Lab-grown meat hits grocery shelves in Singapore: Is the US next?", summary: "Click the headline above to read the full story and analysis..." },
+                    explained: { title: "Real meat, no animals. It's finally here.", summary: "Cultivated meat is grown from cells. It solves ethical issues, but cost and scaling are still huge hurdles." },
+                    debunked: { title: "It's not 'fake' meat, but it's not cheap either.", summary: "Don't expect this at Walmart soon. It's a luxury product for now, and US regulators are very cautious." }
+                }
+            },
+            {
+                category: "Safety", color: "red", source: "CityLab", time: "1h ago",
+                title: "New AI surveillance in subways: Safety breakthrough or privacy nightmare?",
+                img: "https://images.unsplash.com/photo-1517154596051-c63233f191b8?q=80&w=2574&auto=format&fit=crop",
+                nuance: "High Controversy", likeCount: "18k",
+                lensData: {
+                    raw: { title: "New AI surveillance in subways: Safety breakthrough or privacy nightmare?", summary: "Click the headline above to read the full story and analysis..." },
+                    explained: { title: "AI cameras are scanning for weapons in the subway.", summary: "The goal is to stop crime before it happens. It detects guns, but critics worry about false positives." },
+                    debunked: { title: "It's not 'Minority Report' yet.", summary: "The tech is basic object detection, not mind reading. But the privacy trade-off is a very real concern." }
+                }
+            },
+            {
+                category: "Traffic", color: "yellow", source: "Urbanist", time: "5h ago",
+                title: "Congestion Pricing starts next month: How it impacts your commute.",
+                img: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=2621&auto=format&fit=crop",
+                nuance: "Polarizing", likeCount: "31k",
+                lensData: {
+                    raw: { title: "Congestion Pricing starts next month: How it impacts your commute.", summary: "Click the headline above to read the full story and analysis..." },
+                    explained: { title: "Driving into the city is about to cost $15 more.", summary: "To reduce traffic, you pay to enter busy zones. The money fixes the subway. It's controversial but standard in London." },
+                    debunked: { title: "It won't fix traffic overnight.", summary: "Studies show it takes years to change behavior. Expect chaos for the first few months." }
+                }
+            },
+            {
+                category: "Gaming", color: "green", source: "IGN", time: "7h ago",
+                title: "Twitch's new payout model causes mass exodus of top streamers.",
+                img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2670&auto=format&fit=crop",
+                nuance: null, likeCount: "55k",
+                lensData: {
+                    raw: { title: "Twitch's new payout model causes mass exodus of top streamers.", summary: "Click the headline above to read the full story and analysis..." },
+                    explained: { title: "Why streamers are quitting Twitch for Kick.", summary: "Twitch is taking a bigger cut of the money. Competitors are offering better deals to steal talent." },
+                    debunked: { title: "It's not a 'mass exodus', it's a negotiation tactic.", summary: "Most top streamers are staying. They are just making noise to get better contracts." }
+                }
+            }
+        ];
+
+        // --- DATA: Discover Items ---
+        const discoverItems = [
+            { title: "Matcha prices soar 200% globally.", category: "Food", img: "https://images.unsplash.com/photo-1556910103-1c02745a30bf?q=80&w=2670&auto=format&fit=crop", trend: "Trending" },
+            { title: "Subway surfing crackdown.", category: "Safety", img: "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?q=80&w=2670&auto=format&fit=crop", trend: null },
+            { title: "New VR headset sells out in minutes.", category: "Tech", img: "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?q=80&w=2678&auto=format&fit=crop", trend: "Hot" },
+            { title: "The best ramen spots in NYC right now.", category: "Food", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=2670&auto=format&fit=crop", trend: null },
+            { title: "Indie sleaze fashion return confirmed.", category: "Culture", img: "https://images.unsplash.com/photo-1529139574466-a302d20525a9?q=80&w=2670&auto=format&fit=crop", trend: "Viral" },
+            { title: "SpaceX launches new satellite network.", category: "Tech", img: "https://images.unsplash.com/photo-1517976487492-5750f3195933?q=80&w=2670&auto=format&fit=crop", trend: null }
+        ];
+
+        // --- DATA: AI Contexts ---
+        const aiContexts = {
+            "Entertainment": { subtitle: "Analyzing Cultural Impact", sentiment: "Mixed", bias: "Slightly Negative", summary: "Current discourse is heavily polarized. While fanbase engagement is at an all-time high, critical reception suggests potential burnout regarding this topic." },
+            "Food": { subtitle: "Analyzing Market Trends", sentiment: "Positive", bias: "Neutral", summary: "This trend is driven by economic factors (inflation) rather than taste. Social sentiment is sympathetic, with high engagement on cost-saving alternatives." },
+            "Tech": { subtitle: "Analyzing Innovation Cycle", sentiment: "Cautious", bias: "Tech-Optimist", summary: "Innovation is praised, but privacy concerns are dominating the narrative. Regulatory discussions are heating up in the EU and California." },
+            "Safety": { subtitle: "Analyzing Public Sentiment", sentiment: "Negative", bias: "Alarmist", summary: "Fear-based engagement is driving visibility. Data suggests the actual incident rate is lower than perceived, but viral clips are skewing public perception." },
+            "Default": { subtitle: "Analyzing Context", sentiment: "Neutral", bias: "None Detected", summary: "This topic is currently developing. Early indicators suggest a moderate impact on the general discourse with steady engagement metrics." }
+        };
+
+        let currentFeedData = [...stories];
+        let currentLens = 'raw';
+
+        function setPrismLens(lens) {
+            currentLens = lens;
+
+            // Update Buttons
+            document.querySelectorAll('.lens-btn').forEach(btn => {
+                if (btn.dataset.lens === lens) {
+                    btn.classList.add('active', 'text-white', 'bg-white/10', 'border-white/5', 'shadow-inner');
+                    btn.classList.remove('text-gray-400', 'hover:text-white', 'hover:bg-white/5');
+                } else {
+                    btn.classList.remove('active', 'text-white', 'bg-white/10', 'border-white/5', 'shadow-inner');
+                    btn.classList.add('text-gray-400', 'hover:text-white', 'hover:bg-white/5');
+                }
+            });
+
+            // Re-render Feed with Animation
+            const container = document.getElementById('feed-container');
+            container.style.opacity = '0';
+            setTimeout(() => {
+                renderFeed(currentFeedData);
+                container.style.opacity = '1';
+            }, 200);
+        }
+
+        // --- RENDER FEED ---
+        function renderFeed(data) {
+            const container = document.getElementById('feed-container');
+            let html = '';
+
+            data.forEach((story, index) => {
+                const colorMap = { purple: 'bg-purple-500/20 border-purple-500/30 text-purple-200', pink: 'bg-pink-500/20 border-pink-500/30 text-pink-200', indigo: 'bg-indigo-500/20 border-indigo-500/30 text-indigo-200', red: 'bg-red-500/20 border-red-500/30 text-red-200', orange: 'bg-orange-500/20 border-orange-500/30 text-orange-200', yellow: 'bg-yellow-500/20 border-yellow-500/30 text-yellow-200', green: 'bg-green-500/20 border-green-500/30 text-green-200', blue: 'bg-blue-500/20 border-blue-500/30 text-blue-200' };
+                const tagClass = colorMap[story.color] || colorMap['blue'];
+
+                // Get Lens Data
+                const lensContent = story.lensData ? (story.lensData[currentLens] || story.lensData['raw']) : { title: story.title, summary: "Click to read more..." };
+
+                const nuanceHtml = story.nuance ? `
+            <div class="absolute top-24 left-4 z-20 animate-pulse cursor-pointer active:scale-95 transition-transform" onclick="openContextAI('${story.category}')">
+              <div class="bg-yellow-500/20 backdrop-blur-md border border-yellow-500/40 text-yellow-100 px-3 py-1.5 rounded-full text-[10px] font-medium flex items-center gap-2 shadow-lg">
+                <svg data-lucide="alert-triangle" width="12" height="12"></svg>
+                <span>${story.nuance}</span>
+              </div>
+            </div>` : '';
+
+                html += `
+          <article class="snap-item w-full h-full bg-gray-900 flex items-end relative">
+            <img src="${story.img}" class="absolute inset-0 w-full h-full object-cover opacity-80" alt="Visual">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/95"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent h-[65%] mt-auto"></div>
+            ${nuanceHtml}
+            <div class="absolute right-2 bottom-24 flex flex-col items-center gap-6 z-20 pb-4">
+              <div class="w-11 h-11 rounded-full border-2 border-white p-0.5 bg-black overflow-hidden relative shadow-lg">
+                 <div class="w-full h-full bg-black flex items-center justify-center text-center leading-none"><span class="font-bold text-white text-[8px]">${story.source}</span></div>
+              </div>
+              <button class="flex flex-col items-center gap-1 group" onclick="toggleLike(this)">
+                <div class="p-2.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 group-hover:bg-white/20 transition-all active:scale-90">
+                  <svg data-lucide="heart" class="w-6 h-6 text-white transition-colors duration-300"></svg>
+                </div>
+                <span class="text-xs font-medium drop-shadow-md count-label">${story.likeCount}</span>
+              </button>
+              <button onclick="openContextAI('${story.category}')" class="flex flex-col items-center gap-1 group">
+                <div class="p-2.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 group-hover:bg-white/20 transition-all shadow-lg relative overflow-hidden active:scale-90">
+                   <div class="absolute inset-0 bg-gradient-to-tr from-blue-500/40 via-purple-500/40 to-pink-500/40 opacity-50"></div>
+                  <svg data-lucide="sparkles" class="w-6 h-6 text-white relative z-10"></svg>
+                </div>
+                <span class="text-xs font-medium drop-shadow-md prism-text font-bold">Prism</span>
+              </button>
+              <button class="flex flex-col items-center gap-1 group">
+                <div class="p-2.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 group-hover:bg-white/20 transition-all active:scale-90">
+                  <svg data-lucide="share-2" class="w-6 h-6 text-white"></svg>
+                </div>
+                <span class="text-xs font-medium drop-shadow-md">Share</span>
+              </button>
+            </div>
+            <div class="relative z-10 px-5 pb-24 w-full max-w-[85%] pointer-events-none">
+              <div class="flex items-center gap-2 mb-3 pointer-events-auto">
+                <span class="${tagClass} backdrop-blur-md border text-[10px] font-medium px-2 py-1 rounded uppercase tracking-widest shadow-sm">${story.category}</span>
+                <span class="text-xs text-gray-300 font-medium flex items-center gap-1"><svg data-lucide="clock" width="12" height="12"></svg> ${story.time}</span>
+              </div>
+              <h2 onclick="openStory('${lensContent.title.replace(/'/g, "\\'")}')" class="text-xl font-semibold leading-snug text-shadow mb-2 pr-4 pointer-events-auto cursor-pointer hover:underline underline-offset-4 decoration-white/30 transition-all duration-300">${lensContent.title}</h2>
+              <p class="text-sm text-gray-300 line-clamp-2 mb-4 leading-relaxed text-shadow transition-all duration-300">${lensContent.summary}</p>
+              <div class="flex items-center gap-2 cursor-pointer pointer-events-auto w-fit" onclick="openContextAI('${story.category}')">
+                <svg data-lucide="scale" width="16" height="16" class="text-white/80"></svg>
+                <span class="text-xs font-medium text-white/90 border-white/40 border-b pb-0.5 hover:text-white hover:border-white transition-colors">Analyze Impact</span>
+              </div>
+            </div>
+          </article>`;
+            });
+            container.innerHTML = html;
+            renderIcons();
+        }
+
+        // --- RENDER DISCOVER ---
+        function renderDiscover(filter = 'All') {
+            const container = document.getElementById('discover-grid');
+            const input = document.getElementById('discover-search-input').value.toLowerCase();
+
+            const filtered = discoverItems.filter(item => {
+                const matchesCat = filter === 'All' || item.category === filter;
+                const matchesSearch = item.title.toLowerCase().includes(input) || item.category.toLowerCase().includes(input);
+                return matchesCat && matchesSearch;
+            });
+
+            let html = '';
+            filtered.forEach(item => {
+                const badge = item.trend ? `<div class="absolute bottom-2 right-2 bg-black/60 backdrop-blur-md px-1.5 py-0.5 rounded text-[9px] font-medium text-green-300 border border-green-500/30">${item.trend}</div>` : '';
+                html += `
+          <div class="space-y-2 cursor-pointer group" onclick="openStory('${item.title}')">
+            <div class="aspect-[4/3] rounded-xl overflow-hidden border border-gray-800 relative">
+              <img src="${item.img}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="">
+              ${badge}
+            </div>
+            <p class="text-xs font-medium leading-snug text-gray-200 group-hover:text-white transition-colors">${item.title}</p>
+          </div>
+        `;
+            });
+
+            container.innerHTML = html || '<div class="col-span-2 text-center text-gray-500 text-sm py-8">No stories found.</div>';
+        }
+
+        // --- FULL STORY READER ---
+        function openStory(title) {
+            const story = stories.find(s => s.title === title) || discoverItems.find(s => s.title === title) || stories[0];
+            const reader = document.getElementById('story-reader');
+
+            document.getElementById('reader-img').src = story.img;
+            document.getElementById('reader-title').textContent = story.title;
+            document.getElementById('reader-source').textContent = (story.source || "Prism Wire") + " • " + (story.time || "Just now");
+            document.getElementById('reader-tag').textContent = story.category;
+
+            reader.classList.remove('hidden', 'slide-down-panel');
+            reader.classList.add('slide-up-panel');
+        }
+
+        function closeStory() {
+            const reader = document.getElementById('story-reader');
+            reader.classList.remove('slide-up-panel');
+            reader.classList.add('slide-down-panel');
+            setTimeout(() => reader.classList.add('hidden'), 300);
+        }
+
+        // --- CONTEXT AI ---
+        function openContextAI(topic) {
+            const overlay = document.getElementById('context-overlay');
+            const sheet = document.getElementById('context-panel');
+            const backdrop = document.getElementById('context-backdrop');
+            const body = document.getElementById('context-body');
+            const subtitle = document.getElementById('context-subtitle');
+
+            const data = aiContexts[topic] || aiContexts['Default'];
+
+            subtitle.textContent = data.subtitle;
+            body.innerHTML = `
+        <div class="grid grid-cols-2 gap-4">
+            <div class="bg-white/5 p-4 rounded-2xl border border-white/5">
+                <div class="text-[10px] text-gray-400 uppercase tracking-wider font-bold mb-1">Sentiment</div>
+                <div class="text-lg font-semibold text-white">${data.sentiment}</div>
+            </div>
+            <div class="bg-white/5 p-4 rounded-2xl border border-white/5">
+                <div class="text-[10px] text-gray-400 uppercase tracking-wider font-bold mb-1">Bias Check</div>
+                <div class="text-lg font-semibold text-white">${data.bias}</div>
+            </div>
+        </div>
+        <div class="bg-white/5 p-5 rounded-2xl border border-white/5">
+            <div class="text-[10px] text-gray-400 uppercase tracking-wider font-bold mb-2">Executive Summary</div>
+            <p class="text-sm text-gray-300 leading-relaxed">${data.summary}</p>
+        </div>
+        <div class="space-y-3">
+             <div class="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Key Players</div>
+             <div class="flex gap-2 flex-wrap">
+                <span class="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-gray-300">Public Sentiment</span>
+                <span class="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-gray-300">Media Outlets</span>
+                <span class="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-gray-300">Regulators</span>
+             </div>
+        </div>
+      `;
+
+            overlay.classList.remove('hidden');
+            setTimeout(() => {
+                backdrop.classList.remove('opacity-0');
+                sheet.classList.remove('translate-y-full');
+                sheet.classList.add('slide-up-panel');
+            }, 10);
+        }
+
+        function closeContextAI() {
+            const overlay = document.getElementById('context-overlay');
+            const sheet = document.getElementById('context-panel');
+            const backdrop = document.getElementById('context-backdrop');
+
+            sheet.classList.remove('slide-up-panel');
+            sheet.classList.add('translate-y-full');
+            backdrop.classList.add('opacity-0');
+            setTimeout(() => overlay.classList.add('hidden'), 300);
+        }
+
+        // --- UTILS & NAVIGATION ---
+        function renderIcons() {
+            if (window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 1.5 } });
+        }
+
+        function switchTab(targetId, el) {
+            document.querySelectorAll('.tab-content').forEach(v => { v.classList.remove('active'); v.style.display = 'none'; });
+            const target = document.getElementById(targetId);
+            target.style.display = 'block';
+            setTimeout(() => target.classList.add('active'), 10);
+
+            document.querySelectorAll('#bottom-nav .nav-item').forEach(item => {
+                item.classList.replace('text-white', 'text-gray-500');
+                item.querySelector('svg').classList.remove('stroke-[2.5]');
+            });
+            if (el) {
+                el.classList.replace('text-gray-500', 'text-white');
+                el.querySelector('svg').classList.add('stroke-[2.5]');
+            }
+            renderIcons();
+        }
+
+        function switchHomeFeed(type) {
+            const btns = { foryou: document.getElementById('btn-foryou'), following: document.getElementById('btn-following') };
+            const inds = { foryou: document.getElementById('indicator-foryou'), following: document.getElementById('indicator-following') };
+
+            if (type === 'following') {
+                btns.foryou.classList.replace('text-white', 'text-white/60');
+                btns.following.classList.replace('text-white/60', 'text-white');
+                inds.foryou.classList.add('scale-0');
+                inds.following.classList.remove('scale-0');
+                // Shuffle for effect
+                renderFeed([...stories].sort(() => Math.random() - 0.5));
+            } else {
+                btns.following.classList.replace('text-white', 'text-white/60');
+                btns.foryou.classList.replace('text-white/60', 'text-white');
+                inds.following.classList.add('scale-0');
+                inds.foryou.classList.remove('scale-0');
+                renderFeed(stories);
+            }
+        }
+
+        function toggleLike(btn) {
+            btn.classList.add('heart-pop');
+            const icon = btn.querySelector('svg');
+            if (icon.classList.contains('fill-red-500')) {
+                icon.classList.remove('fill-red-500', 'text-red-500');
+                icon.classList.add('text-white');
+            } else {
+                icon.classList.remove('text-white');
+                icon.classList.add('fill-red-500', 'text-red-500');
+            }
+            setTimeout(() => btn.classList.remove('heart-pop'), 350);
+        }
+
+        function filterDiscover(cat) {
+            renderDiscover(cat);
+        }
+
+        function navigateToSearch() {
+            const el = document.querySelector('[data-tab="discover"]');
+            switchTab('view-discover', el);
+            setTimeout(() => document.getElementById('discover-search-input').focus(), 100);
+        }
+
+        // --- INIT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderFeed(stories);
+            renderDiscover();
+
+            // Search Listeners
+            document.getElementById('discover-search-input').addEventListener('keyup', () => renderDiscover());
+        });
+    </script>
+</body>
+
+</html>
