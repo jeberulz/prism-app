@@ -155,13 +155,13 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
   ];
 
   return (
-    <div className="absolute inset-0 z-50 flex flex-col justify-end transition-all duration-300">
+    <div className="fixed inset-0 z-[10000] flex flex-col justify-end transition-all duration-300">
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity opacity-100"
         onClick={onClose}
       />
 
-      <div className="glass-panel w-full h-[70vh] rounded-t-[32px] transform transition-transform duration-400 flex flex-col overflow-hidden relative z-10 border-t border-white/20 shadow-2xl slide-up-panel">
+      <div className="glass-panel w-full h-[80vh] max-h-[calc(100vh-80px)] rounded-t-[32px] transform transition-transform duration-400 flex flex-col overflow-hidden relative z-10 border-t border-white/20 shadow-2xl slide-up-panel" style={{ bottom: '80px' }}>
         <div className="w-full flex justify-center pt-3 pb-1 cursor-pointer bg-transparent" onClick={onClose}>
           <div className="w-12 h-1 bg-white/30 rounded-full" />
         </div>
@@ -207,7 +207,7 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto no-scrollbar p-6 space-y-4">
+        <div className="flex-1 overflow-y-auto no-scrollbar p-6 pb-24 space-y-4">
           {activeTab === 'consensus' && (
             <>
               {/* AT A GLANCE Card */}
@@ -503,7 +503,7 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
           {activeTab === 'copilot' && (
             <div className="flex flex-col h-full">
               {/* Chat Messages */}
-              <div className="flex-1 overflow-y-auto no-scrollbar space-y-4 pb-4">
+              <div className="flex-1 overflow-y-auto no-scrollbar space-y-4 pb-24 px-6">
                 {messages.map((message) => (
                   <div
                     key={message.id}
@@ -567,7 +567,7 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
               </div>
 
               {/* Input Area */}
-              <div className="pt-4 border-t border-white/5">
+              <div className="pt-4 pb-6 px-6 border-t border-white/5">
                 <div className="flex gap-2 items-center">
                   <input
                     ref={inputRef}
