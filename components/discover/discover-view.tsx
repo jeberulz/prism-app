@@ -30,7 +30,7 @@ export function DiscoverView({ onOpenStory }: DiscoverViewProps) {
       <div className="px-6 pt-12 pb-4 sticky top-0 bg-black/80 backdrop-blur-md z-20 border-b border-white/10">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-semibold tracking-tight">Discover</h1>
-          <button className="text-[10px] font-bold uppercase tracking-wider bg-gradient-to-r from-blue-500 to-purple-500 px-3 py-1.5 rounded-full shadow-[0_0_15px_rgba(168,85,247,0.4)] active:scale-95 transition-transform flex items-center gap-1">
+          <button className="text-[10px] font-bold uppercase tracking-wider bg-white/10 backdrop-blur-xl border border-white/30 px-3 py-1.5 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.1)] active:scale-95 transition-transform flex items-center gap-1 hover:bg-white/20">
             <Shuffle size={12} />
             Surprise Me
           </button>

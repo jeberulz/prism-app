@@ -183,7 +183,7 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
 
         <div className="px-6 pt-2 pb-4 flex items-center justify-between border-b border-white/5">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-[0_0_15px_rgba(168,85,247,0.5)]">
+            <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-xl border border-white/30 flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.2)]">
               <Sparkles size={16} className="text-white" />
             </div>
             <div>
@@ -528,7 +528,7 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
                     )}
                   >
                     {message.isAI && (
-                      <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0 mt-1">
+                      <div className="w-6 h-6 rounded-full bg-white/10 backdrop-blur-xl border border-white/30 flex items-center justify-center flex-shrink-0 mt-1 shadow-[0_0_10px_rgba(255,255,255,0.1)]">
                         <Sparkles size={12} className="text-white" />
                       </div>
                     )}
@@ -550,7 +550,7 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
                 {/* Typing Indicator */}
                 {isTyping && (
                   <div className="flex gap-3 items-start">
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0 mt-1">
+                    <div className="w-6 h-6 rounded-full bg-white/10 backdrop-blur-xl border border-white/30 flex items-center justify-center flex-shrink-0 mt-1 shadow-[0_0_10px_rgba(255,255,255,0.1)]">
                       <Sparkles size={12} className="text-white" />
                     </div>
                     <div className="bg-gray-900/60 rounded-2xl px-4 py-3 border border-white/5">

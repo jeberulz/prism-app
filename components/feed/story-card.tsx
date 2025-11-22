@@ -73,11 +73,10 @@ export function StoryCard({ story, currentLens, onOpenStory, onOpenContext }: St
         </button>
 
         <button onClick={() => onOpenContext(story.category)} className="flex flex-col items-center gap-1 group">
-          <div className="p-2.5 rounded-full backdrop-blur-md border border-white/20 group-hover:bg-white/20 transition-all shadow-lg relative overflow-hidden active:scale-90">
-            <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/40 via-purple-500/40 to-pink-500/40 opacity-50" />
+          <div className="p-2.5 rounded-full backdrop-blur-xl bg-white/10 border border-white/30 group-hover:bg-white/20 group-hover:border-white/50 group-hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all shadow-lg relative overflow-hidden active:scale-90">
             <Sparkles size={24} className="text-white relative z-10" />
           </div>
-          <span className="text-xs font-medium drop-shadow-md prism-text font-bold">Prism</span>
+          <span className="text-xs font-medium drop-shadow-md font-bold text-white/90 group-hover:text-white transition-colors">Prism</span>
         </button>
 
         <button className="flex flex-col items-center gap-1 group">

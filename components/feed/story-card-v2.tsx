@@ -79,16 +79,6 @@ export function StoryCardV2({ story, currentLens, onOpenStory, onOpenContext }: 
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/95" />
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent h-[65%] mt-auto" />
       
-      {/* Lens indicator badge */}
-      <div className="absolute top-4 left-4 z-20 opacity-0 animate-[fadeIn_0.3s_ease-in-out_forwards]">
-        <div className="px-2 py-1 rounded-md backdrop-blur-md bg-black/40 border border-white/20 flex items-center gap-1.5">
-          <LensIcon size={currentStyle.iconSize} className="text-white/80" />
-          <span className="text-[9px] font-semibold uppercase tracking-wider text-white/90">
-            {currentLens}
-          </span>
-        </div>
-      </div>
-      
       {story.nuance && (
         <div className="absolute top-24 left-4 z-20 animate-pulse cursor-pointer active:scale-95 transition-transform" onClick={() => onOpenContext(story.category)}>
           <div className="bg-yellow-500/20 backdrop-blur-md border border-yellow-500/40 text-yellow-100 px-3 py-1.5 rounded-full text-[10px] font-medium flex items-center gap-2 shadow-lg">
@@ -116,11 +106,10 @@ export function StoryCardV2({ story, currentLens, onOpenStory, onOpenContext }: 
         </button>
 
         <button onClick={() => onOpenContext(story.category)} className="flex flex-col items-center gap-1 group">
-          <div className="p-2.5 rounded-full backdrop-blur-md border border-white/20 group-hover:bg-white/20 transition-all shadow-lg relative overflow-hidden active:scale-90">
-            <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/40 via-purple-500/40 to-pink-500/40 opacity-50" />
+          <div className="p-2.5 rounded-full backdrop-blur-xl bg-white/10 border border-white/30 group-hover:bg-white/20 group-hover:border-white/50 group-hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all shadow-lg relative overflow-hidden active:scale-90">
             <Sparkles size={24} className="text-white relative z-10" />
           </div>
-          <span className="text-xs font-medium drop-shadow-md prism-text font-bold">Prism</span>
+          <span className="text-xs font-medium drop-shadow-md font-bold text-white/90 group-hover:text-white transition-colors">Prism</span>
         </button>
 
         <button className="flex flex-col items-center gap-1 group">
