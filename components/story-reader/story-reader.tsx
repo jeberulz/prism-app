@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { ChevronDown, Bookmark, Share2 } from 'lucide-react';
 import { Story } from '@/types';
 import { useState, useEffect } from 'react';
+import { DemoControls, DemoMode, PrismInsight, SentimentWrapper, SmartEntity } from './ai-features';
+import { InlineAIChat } from './inline-ai-chat';
 
 interface StoryReaderProps {
   story: Story | null;
@@ -13,6 +15,7 @@ interface StoryReaderProps {
 
 export function StoryReader({ story, isOpen, onClose }: StoryReaderProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const [demoMode, setDemoMode] = useState<DemoMode>('standard');
 
   useEffect(() => {
     if (isOpen) {
@@ -69,25 +72,98 @@ export function StoryReader({ story, isOpen, onClose }: StoryReaderProps) {
             {story.title}
           </h1>
 
-          <div className="space-y-5 text-gray-300 leading-relaxed text-[15px] font-light tracking-wide">
-            <p className="first-letter:text-3xl first-letter:font-bold first-letter:text-white first-letter:mr-1 first-letter:float-left text-gray-200 font-normal">
-              The rapid shift in consumer behavior has taken analysts by surprise. What started as a niche trend on social media has quickly evolved into a significant market force.
-            </p>
-            <p>
-              &ldquo;We haven&apos;t seen engagement metrics this high since 2019,&rdquo; notes a senior analyst from the firm. The data suggests a fundamental disconnect between traditional forecasting models and the actual pulse of the demographic.
-            </p>
-            <div className="my-8 border-l-[3px] border-purple-500 pl-5 py-1">
-              <p className="text-white font-medium italic text-lg leading-snug">
-                &ldquo;It&apos;s not just a trend, it&apos;s a complete restructuring of value perception.&rdquo;
-              </p>
+          {/* Demo Controls */}
+          <DemoControls currentMode={demoMode} onModeChange={setDemoMode} />
+
+          <InlineAIChat>
+            <div className="space-y-5 text-gray-300 leading-relaxed text-[15px] font-light tracking-wide">
+              {/* Paragraph 1 */}
+              {demoMode === 'sentiment' ? (
+                <SentimentWrapper sentiment="neutral">
+                  <p className="first-letter:text-3xl first-letter:font-bold first-letter:text-white first-letter:mr-1 first-letter:float-left text-gray-200 font-normal">
+                    The rapid shift in consumer behavior has taken analysts by surprise. What started as a niche trend on social media has quickly evolved into a significant market force.
+                  </p>
+                </SentimentWrapper>
+              ) : (
+                <p className="first-letter:text-3xl first-letter:font-bold first-letter:text-white first-letter:mr-1 first-letter:float-left text-gray-200 font-normal">
+                  The rapid shift in {demoMode === 'entities' ? <SmartEntity term="consumer behavior" type="concept" definition="Aggregate patterns of individual and group purchasing decisions, currently shifting towards value-based consumption." /> : 'consumer behavior'} has taken analysts by surprise. What started as a niche trend on social media has quickly evolved into a significant market force.
+                </p>
+              )}
+
+              {/* Insight 1 */}
+              {demoMode === 'insights' && (
+                 <PrismInsight 
+                   type="context" 
+                   preview="Why this specific shift matters" 
+                   content="This behavior change marks the first time since 2008 that value-perception has decoupled from brand loyalty metrics across all three major demographic cohorts." 
+                 />
+              )}
+
+              {/* Paragraph 2 */}
+              {demoMode === 'sentiment' ? (
+                <SentimentWrapper sentiment="controversial">
+                  <p>
+                    &ldquo;We haven&apos;t seen engagement metrics this high since 2019,&rdquo; notes a senior analyst from the firm. The data suggests a fundamental disconnect between traditional forecasting models and the actual pulse of the demographic.
+                  </p>
+                </SentimentWrapper>
+              ) : (
+                <p>
+                  &ldquo;We haven&apos;t seen engagement metrics this high since 2019,&rdquo; notes a senior analyst from the firm. The data suggests a fundamental disconnect between {demoMode === 'entities' ? <SmartEntity term="traditional forecasting" type="concept" definition="Standard econometric models relying on historical data, often failing to predict black swan events." /> : 'traditional forecasting models'} and the actual pulse of the demographic.
+                </p>
+              )}
+
+              {/* Quote Block */}
+              <div className="my-8 border-l-[3px] border-purple-500 pl-5 py-1">
+                <p className="text-white font-medium italic text-lg leading-snug">
+                  &ldquo;It&apos;s not just a trend, it&apos;s a complete restructuring of value perception.&rdquo;
+                </p>
+              </div>
+
+              {/* Insight 2 */}
+               {demoMode === 'insights' && (
+                 <PrismInsight 
+                   type="fact" 
+                   preview="Data verification" 
+                   content="Market analysis from 4 independent firms corroborates this restructuring claim, showing a 40% drop in legacy brand value perception." 
+                 />
+              )}
+
+              {/* Paragraph 3 */}
+              {demoMode === 'sentiment' ? (
+                <SentimentWrapper sentiment="negative">
+                   <p>
+                    As the situation develops, experts warn that companies failing to adapt to this speed of information travel will be left behind. The viral nature of the phenomenon means reputation can be built or dismantled in hours, not weeks.
+                  </p>
+                </SentimentWrapper>
+              ) : (
+                 <p>
+                    As the situation develops, experts warn that companies failing to adapt to this speed of information travel will be left behind. The {demoMode === 'entities' ? <SmartEntity term="viral nature" type="concept" definition="The mechanism by which information spreads exponentially through network nodes, bypassing traditional gatekeepers." /> : 'viral nature'} of the phenomenon means reputation can be built or dismantled in hours, not weeks.
+                  </p>
+              )}
+
+               {/* Insight 3 */}
+               {demoMode === 'insights' && (
+                 <PrismInsight 
+                   type="counterpoint" 
+                   preview="Alternative perspective" 
+                   content="While speed is critical, some industry veterans argue that long-term trust is still built on product consistency, regardless of viral cycles." 
+                 />
+              )}
+
+              {/* Paragraph 4 */}
+              {demoMode === 'sentiment' ? (
+                <SentimentWrapper sentiment="positive">
+                  <p>
+                    Moving forward, the focus shifts to sustainability. Can this momentum be maintained, or is it another flash in the pan? Early indicators suggest the former.
+                  </p>
+                </SentimentWrapper>
+              ) : (
+                 <p>
+                    Moving forward, the focus shifts to sustainability. Can this momentum be maintained, or is it another flash in the pan? Early indicators suggest the former.
+                  </p>
+              )}
             </div>
-            <p>
-              As the situation develops, experts warn that companies failing to adapt to this speed of information travel will be left behind. The viral nature of the phenomenon means reputation can be built or dismantled in hours, not weeks.
-            </p>
-            <p>
-              Moving forward, the focus shifts to sustainability. Can this momentum be maintained, or is it another flash in the pan? Early indicators suggest the former.
-            </p>
-          </div>
+          </InlineAIChat>
 
           <div className="mt-12 pt-8 border-t border-white/10 flex flex-col gap-5">
             <h4 className="text-xs font-bold text-gray-500 uppercase tracking-widest">Related Coverage</h4>
@@ -117,4 +193,3 @@ export function StoryReader({ story, isOpen, onClose }: StoryReaderProps) {
     </div>
   );
 }
-

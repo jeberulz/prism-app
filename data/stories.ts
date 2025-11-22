@@ -6,6 +6,7 @@ export const stories: Story[] = [
     title: "The Weeknd's AI vocals controversy sparks industry-wide legal battle.",
     img: "https://picsum.photos/800/1200?random=1",
     nuance: "Missing Context", likeCount: "124k",
+    hasVideo: true,
     lensData: {
       raw: { title: "The Weeknd's AI vocals controversy sparks industry-wide legal battle.", summary: "Click the headline above to read the full story and analysis..." },
       explained: { title: "Why The Weeknd is suing over AI voice clones.", summary: "Artists are fighting for the right to own their voice. This lawsuit could set a major precedent for AI copyright." },
@@ -39,6 +40,7 @@ export const stories: Story[] = [
     title: "A24's new horror marketing strategy is terrifyingly effective.",
     img: "https://picsum.photos/800/1200?random=4",
     nuance: null, likeCount: "67k",
+    hasVideo: true,
     lensData: {
       raw: { title: "A24's new horror marketing strategy is terrifyingly effective.", summary: "Click the headline above to read the full story and analysis..." },
       explained: { title: "How A24 uses viral stunts to sell scary movies.", summary: "From fake websites to real-life pranks, they build hype by blurring reality and fiction." },

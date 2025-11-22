@@ -40,10 +40,10 @@ export function FeedContainer({ onOpenStory, onOpenContext, onNavigateToSearch }
           <VersionToggle />
           <button
             onClick={onNavigateToSearch}
-            className="pointer-events-auto p-2.5 rounded-full bg-black/30 backdrop-blur-md active:scale-95 transition-transform border border-white/10 hover:bg-white/10"
+            className="pointer-events-auto p-2.5 rounded-full bg-black/30 backdrop-blur-md active:scale-95 transition-transform border border-white/10 hover:bg-white/10 hover:border-cyan-500/30 group transition-colors"
             aria-label="Search"
           >
-            <Search size={20} className="text-white" />
+            <Search size={20} className="text-white group-hover:text-cyan-200 transition-colors" />
           </button>
         </div>
       </header>

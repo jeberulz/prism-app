@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Heart, Sparkles, Share2, Scale, Clock, AlertTriangle } from 'lucide-react';
+import { Heart, Sparkles, Share2, Scale, Clock, AlertTriangle, Play } from 'lucide-react';
 import { Story, PrismLens } from '@/types';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -55,6 +55,14 @@ export function StoryCard({ story, currentLens, onOpenStory, onOpenContext }: St
         </div>
       )}
 
+      {story.hasVideo && (
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none">
+          <div className="w-16 h-16 rounded-full bg-black/30 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+            <Play size={32} className="text-white fill-white translate-x-1" />
+          </div>
+        </div>
+      )}
+
       <div className="absolute right-2 bottom-24 flex flex-col items-center gap-6 z-20 pb-4">
         <div className="w-11 h-11 rounded-full border-2 border-white p-0.5 bg-black overflow-hidden relative shadow-lg">
           <div className="w-full h-full bg-black flex items-center justify-center text-center leading-none">
@@ -73,10 +81,10 @@ export function StoryCard({ story, currentLens, onOpenStory, onOpenContext }: St
         </button>
 
         <button onClick={() => onOpenContext(story.category)} className="flex flex-col items-center gap-1 group">
-          <div className="p-2.5 rounded-full backdrop-blur-xl bg-white/10 border border-white/30 group-hover:bg-white/20 group-hover:border-white/50 group-hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all shadow-lg relative overflow-hidden active:scale-90">
-            <Sparkles size={24} className="text-white relative z-10" />
+          <div className="p-2.5 rounded-full backdrop-blur-xl bg-white/10 border border-white/30 group-hover:bg-white/20 group-hover:border-cyan-500/50 group-hover:shadow-[0_0_15px_rgba(6,182,212,0.3)] transition-all shadow-lg relative overflow-hidden active:scale-90">
+            <Sparkles size={24} className="text-white group-hover:text-cyan-100 relative z-10" />
           </div>
-          <span className="text-xs font-medium drop-shadow-md font-bold text-white/90 group-hover:text-white transition-colors">Prism</span>
+          <span className="text-xs font-medium drop-shadow-md font-bold text-white/90 group-hover:text-cyan-100 transition-colors">Prism</span>
         </button>
 
         <button className="flex flex-col items-center gap-1 group">
@@ -106,9 +114,9 @@ export function StoryCard({ story, currentLens, onOpenStory, onOpenContext }: St
         <p className="text-sm text-gray-300 line-clamp-2 mb-4 leading-relaxed text-shadow transition-all duration-300">
           {lensContent.summary}
         </p>
-        <div className="flex items-center gap-2 cursor-pointer pointer-events-auto w-fit" onClick={() => onOpenContext(story.category)}>
-          <Scale size={16} className="text-white/80" />
-          <span className="text-xs font-medium text-white/90 border-white/40 border-b pb-0.5 hover:text-white hover:border-white transition-colors">
+        <div className="flex items-center gap-2 cursor-pointer pointer-events-auto w-fit group/analyze" onClick={() => onOpenContext(story.category)}>
+          <Scale size={16} className="text-white/80 group-hover/analyze:text-cyan-300 transition-colors" />
+          <span className="text-xs font-medium text-white/90 border-white/40 border-b pb-0.5 group-hover/analyze:text-cyan-100 group-hover/analyze:border-cyan-400 transition-colors">
             Analyze Impact
           </span>
         </div>

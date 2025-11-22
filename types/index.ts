@@ -16,6 +16,7 @@ export interface Story {
   nuance: string | null;
   likeCount: string;
   lensData: LensData;
+  hasVideo?: boolean;
 }
 
 export interface DiscoverItem {
