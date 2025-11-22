@@ -17,6 +17,7 @@ export interface Story {
   likeCount: string;
   lensData: LensData;
   hasVideo?: boolean;
+  videoUrl?: string;
 }
 
 export interface DiscoverItem {

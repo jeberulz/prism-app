@@ -67,15 +67,27 @@ export function StoryCardV2({ story, currentLens, onOpenStory, onOpenContext }: 
   const LensIcon = currentStyle.icon;
 
   return (
-    <article className="snap-item w-full h-full bg-gray-900 flex items-end relative">
-      <Image
-        src={story.img}
-        alt={story.title}
-        fill
-        className="object-cover opacity-80"
-        sizes="100vw"
-        unoptimized
-      />
+    <article className="snap-item w-full h-full bg-gray-900 flex items-end relative overflow-hidden">
+      {story.videoUrl ? (
+        <video
+          src={story.videoUrl}
+          className="absolute inset-0 w-full h-full object-cover opacity-90"
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster={story.img}
+        />
+      ) : (
+        <Image
+          src={story.img}
+          alt={story.title}
+          fill
+          className="object-cover opacity-80"
+          sizes="100vw"
+          unoptimized
+        />
+      )}
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/95" />
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent h-[65%] mt-auto" />
       
@@ -88,7 +100,7 @@ export function StoryCardV2({ story, currentLens, onOpenStory, onOpenContext }: 
         </div>
       )}
 
-      {story.hasVideo && (
+      {story.hasVideo && !story.videoUrl && (
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none">
           <div className="w-16 h-16 rounded-full bg-black/30 backdrop-blur-sm border border-white/20 flex items-center justify-center">
             <Play size={32} className="text-white fill-white translate-x-1" />
