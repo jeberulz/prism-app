@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
-import { Search, Shuffle } from 'lucide-react';
+import { Search, Shuffle, Music, Utensils, Bot, GitBranch } from 'lucide-react';
 import { discoverItems } from '@/data/stories';
 import { Story } from '@/types';
 
@@ -12,9 +12,55 @@ interface DiscoverViewProps {
 
 const categories = ['All', 'Music', 'Food', 'Tech'];
 
+const pulseItems = [
+  {
+    title: "Global Internet Outage",
+    leftSide: "Cyberattack Rumor",
+    rightSide: "Infrastructure Update",
+    img: "https://picsum.photos/800/400?random=20",
+    colorFrom: "from-amber-900/80",
+    colorTo: "to-orange-900/80",
+    accent: "text-amber-300",
+    subAccent: "text-amber-200",
+    dotColor: "bg-amber-300"
+  },
+  {
+    title: "Market Flash Crash",
+    leftSide: "AI Trading Error",
+    rightSide: "Market Correction",
+    img: "https://picsum.photos/800/400?random=21",
+    colorFrom: "from-red-900/80",
+    colorTo: "to-rose-900/80",
+    accent: "text-red-300",
+    subAccent: "text-red-200",
+    dotColor: "bg-red-300"
+  },
+  {
+    title: "New Energy Bill",
+    leftSide: "Innovation Boost",
+    rightSide: "Cost Hike Risks",
+    img: "https://picsum.photos/800/400?random=22",
+    colorFrom: "from-blue-900/80",
+    colorTo: "to-indigo-900/80",
+    accent: "text-blue-300",
+    subAccent: "text-blue-200",
+    dotColor: "bg-blue-300"
+  }
+];
+
 export function DiscoverView({ onOpenStory }: DiscoverViewProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [filter, setFilter] = useState('All');
+  const [currentPulseIndex, setCurrentPulseIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentPulseIndex((prev) => (prev + 1) % pulseItems.length);
+    }, 8000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentPulse = pulseItems[currentPulseIndex];
 
   const filteredItems = useMemo(() => {
     return discoverItems.filter(item => {
@@ -55,13 +101,13 @@ export function DiscoverView({ onOpenStory }: DiscoverViewProps) {
               key={cat}
               onClick={() => setFilter(cat)}
               className={cat === filter
-                ? "bg-white text-black border border-white px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-transform active:scale-95"
-                : "bg-gray-800 border border-gray-700 px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap hover:bg-gray-700 transition-colors"
+                ? "bg-white text-black border border-white px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-transform active:scale-95 flex items-center gap-2"
+                : "bg-gray-800 border border-gray-700 px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap hover:bg-gray-700 transition-colors flex items-center gap-2"
               }
             >
-              {cat === 'Music' && '🎵 '}
-              {cat === 'Food' && '🍜 '}
-              {cat === 'Tech' && '🤖 '}
+              {cat === 'Music' && <Music size={12} />}
+              {cat === 'Food' && <Utensils size={12} />}
+              {cat === 'Tech' && <Bot size={12} />}
               {cat}
             </button>
           ))}
@@ -69,19 +115,49 @@ export function DiscoverView({ onOpenStory }: DiscoverViewProps) {
 
         <div className="mb-8 relative h-32 rounded-2xl overflow-hidden border border-white/10 group cursor-pointer">
           <Image
-            src="https://picsum.photos/800/400?random=20"
+            key={currentPulse.img} // Key forces re-render for transition
+            src={currentPulse.img}
             alt="Live Pulse"
             fill
-            className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
+            className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-700 animate-in fade-in duration-500"
             unoptimized
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-900/80 to-blue-900/80 mix-blend-multiply" />
+          <div className={`absolute inset-0 bg-gradient-to-r ${currentPulse.colorFrom} ${currentPulse.colorTo} mix-blend-multiply transition-colors duration-500`} />
+          
           <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-4">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-blue-300 mb-1 animate-pulse">
-              Live Pulse
-            </span>
-            <h3 className="text-xl font-bold text-white leading-tight mb-1">Global Internet Outage</h3>
-            <p className="text-xs text-gray-300">Affecting 12 countries • 45k posts/min</p>
+            <div className="flex items-center gap-2 mb-2">
+              <span className={`text-[10px] font-bold uppercase tracking-widest ${currentPulse.accent} animate-pulse flex items-center gap-1`}>
+                <div className={`w-1.5 h-1.5 rounded-full ${currentPulse.dotColor} animate-pulse`} />
+                Live Pulse
+              </span>
+              <span className="w-1 h-1 rounded-full bg-white/30" />
+              <span className={`text-[10px] font-bold uppercase tracking-widest ${currentPulse.subAccent} flex items-center gap-1`}>
+                <GitBranch size={10} />
+                High Divergence
+              </span>
+            </div>
+            
+            <h3 className="text-xl font-bold text-white leading-tight mb-3 animate-in slide-in-from-bottom-2 duration-500 key-[title]">
+              {currentPulse.title}
+            </h3>
+            
+            <div className="flex items-center gap-3 text-xs font-medium animate-in slide-in-from-bottom-3 duration-500 delay-100">
+              <div className="bg-white/10 border border-white/20 px-3 py-1 rounded-lg text-white/90 backdrop-blur-sm">
+                {currentPulse.leftSide}
+              </div>
+              <span className="text-white/40 font-bold text-[10px] uppercase">VS</span>
+              <div className="bg-white/10 border border-white/20 px-3 py-1 rounded-lg text-white/90 backdrop-blur-sm">
+                {currentPulse.rightSide}
+              </div>
+            </div>
+          </div>
+
+          {/* Progress Bar */}
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/10">
+            <div 
+              key={currentPulseIndex} // Key restart animation on change
+              className="h-full bg-white/50 origin-left animate-[progress_8s_linear]"
+            />
           </div>
         </div>
 

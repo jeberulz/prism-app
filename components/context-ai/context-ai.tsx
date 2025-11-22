@@ -181,27 +181,28 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
           <div className="w-12 h-1 bg-white/30 rounded-full" />
         </div>
 
-        <div className="px-6 pt-2 pb-4 flex items-center justify-between border-b border-white/5">
+        <div className="px-6 pt-4 pb-2 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-xl border border-white/30 flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.2)]">
-              <Sparkles size={16} className="text-white" />
-            </div>
+             {/* Minimal Prism Icon */}
+             <div className="w-6 h-6 flex items-center justify-center">
+                <Sparkles size={18} className="text-white" />
+             </div>
             <div>
-              <h3 className="text-base font-bold tracking-tight text-white">Prism Intelligence</h3>
-              <p className="text-[10px] text-gray-400 font-medium">{data.subtitle}</p>
+              <h3 className="text-base font-semibold tracking-tight text-white leading-none">Prism Intelligence</h3>
+              {data.subtitle && <p className="text-[10px] text-gray-500 font-medium mt-1 uppercase tracking-wider">{data.subtitle}</p>}
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 bg-white/5 rounded-full hover:bg-white/10 transition-colors"
+            className="p-2 rounded-full hover:bg-white/5 transition-colors text-gray-400 hover:text-white"
             aria-label="Close"
           >
-            <X size={20} className="text-gray-400" />
+            <X size={20} />
           </button>
         </div>
 
-        {/* Tabs */}
-        <div className="flex gap-6 px-6 pt-4 border-b border-white/5">
+        {/* Tabs - Minimal */}
+        <div className="flex gap-8 px-6 border-b border-white/5">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -209,14 +210,11 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
               className={cn(
                 "pb-3 text-sm font-medium transition-colors relative",
                 activeTab === tab.id
-                  ? "text-white"
-                  : "text-gray-400 hover:text-gray-300"
+                  ? "text-white border-b-2 border-white"
+                  : "text-gray-500 hover:text-gray-300"
               )}
             >
               {tab.label}
-              {activeTab === tab.id && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500 rounded-full" />
-              )}
             </button>
           ))}
         </div>
@@ -226,26 +224,19 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
           {activeTab === 'consensus' && (
             <>
               {/* AT A GLANCE Card */}
-              <div className="bg-gray-900/60 rounded-2xl p-5 border border-white/5">
-                <div className="flex items-center gap-2 mb-3">
-                  <Scale size={16} className="text-blue-400" />
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400">AT A GLANCE</h4>
-                </div>
-                <p className="text-sm text-gray-200 leading-relaxed">
+              <div className="mb-6">
+                <h4 className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-2">At a Glance</h4>
+                <p className="text-base text-gray-100 leading-relaxed font-light">
                   {data.atAGlance || data.summary}
                 </p>
               </div>
 
               {/* COMMON GROUND Card */}
-              <div className="bg-gray-900/60 rounded-2xl p-5 border border-white/5">
-                <div className="flex items-center gap-2 mb-3">
-                  <CheckCircle2 size={16} className="text-green-400" />
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400">COMMON GROUND</h4>
-                </div>
-                <ul className="space-y-2">
+              <div className="mb-6">
+                <h4 className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-3">Common Ground</h4>
+                <ul className="space-y-3">
                   {(data.commonGround || []).map((point, index) => (
-                    <li key={index} className="text-sm text-gray-200 leading-relaxed flex items-start gap-2">
-                      <span className="text-green-400 mt-1">•</span>
+                    <li key={index} className="text-sm text-gray-300 leading-relaxed flex items-start gap-3 pl-1 border-l border-white/10">
                       <span>{point}</span>
                     </li>
                   ))}
@@ -254,41 +245,35 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
 
               {/* Official Source Link */}
               {data.officialSource && (
-                <button className="w-full bg-blue-500/20 hover:bg-blue-500/30 rounded-xl p-4 border border-blue-500/30 flex items-center gap-3 transition-colors text-left">
-                  <FileText size={20} className="text-blue-400 flex-shrink-0" />
-                  <div className="flex-1">
-                    <div className="text-sm font-medium text-white">{data.officialSource.title}</div>
-                    <div className="text-xs text-gray-400 mt-0.5">
-                      Verified Primary Source • {data.officialSource.source}
-                    </div>
-                  </div>
-                </button>
+                <div className="mb-6">
+                   <h4 className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-2">Primary Source</h4>
+                    <a href="#" className="block group">
+                      <div className="flex items-center justify-between py-3 border-b border-white/10 group-hover:border-white/30 transition-colors">
+                        <div>
+                          <div className="text-sm font-medium text-white group-hover:text-blue-400 transition-colors">{data.officialSource.title}</div>
+                          <div className="text-xs text-gray-500 mt-1">
+                            {data.officialSource.source}
+                          </div>
+                        </div>
+                        <FileText size={16} className="text-gray-600 group-hover:text-blue-400 transition-colors" />
+                      </div>
+                    </a>
+                </div>
               )}
-
-              {/* Source Credibility Scoring */}
+              
+              {/* Source Credibility Scoring - Simplified */}
               {data.sourceCredibility && (
                 <div className="space-y-4">
-                  <div className="bg-gray-900/60 rounded-2xl p-5 border border-white/5">
-                    <div className="flex items-center gap-2 mb-4">
-                      <Shield size={16} className="text-purple-400" />
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400">SOURCE CREDIBILITY</h4>
-                    </div>
-
-                    {/* Methodology Toggle */}
-                    <button
-                      onClick={() => setMethodologyExpanded(!methodologyExpanded)}
-                      className="w-full flex items-center justify-between p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/5 transition-colors mb-4"
-                    >
-                      <div className="flex items-center gap-2">
-                        <Info size={14} className="text-gray-400" />
-                        <span className="text-xs font-medium text-gray-300">Scoring Methodology</span>
-                      </div>
-                      {methodologyExpanded ? (
-                        <ChevronUp size={16} className="text-gray-400" />
-                      ) : (
-                        <ChevronDown size={16} className="text-gray-400" />
-                      )}
-                    </button>
+                   <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-xs font-semibold uppercase tracking-widest text-gray-500">Source Analysis</h4>
+                      <button
+                        onClick={() => setMethodologyExpanded(!methodologyExpanded)}
+                        className="text-[10px] text-gray-500 hover:text-gray-300 transition-colors flex items-center gap-1"
+                      >
+                        <Info size={10} />
+                        Methodology
+                      </button>
+                   </div>
 
                     {methodologyExpanded && (
                       <div className="mb-4 p-3 bg-white/5 rounded-lg border border-white/5">
@@ -298,85 +283,46 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
                       </div>
                     )}
 
-                    {/* Source Cards */}
-                    <div className="space-y-3">
+                    <div className="space-y-1">
                       {data.sourceCredibility.sources.map((source, index) => {
-                        const scoreColor = source.credibilityScore >= 80 ? 'text-green-400' : source.credibilityScore >= 65 ? 'text-yellow-400' : 'text-red-400';
-                        const scoreBgColor = source.credibilityScore >= 80 ? 'bg-green-500/20 border-green-500/30' : source.credibilityScore >= 65 ? 'bg-yellow-500/20 border-yellow-500/30' : 'bg-red-500/20 border-red-500/30';
+                        const scoreColor = source.credibilityScore >= 80 ? 'text-emerald-400' : source.credibilityScore >= 65 ? 'text-amber-400' : 'text-rose-400';
                         const isExpanded = expandedCredibility === source.name;
                         
                         return (
                           <div
                             key={index}
-                            className={cn(
-                              "rounded-xl border transition-all",
-                              scoreBgColor,
-                              isExpanded && "border-opacity-50"
-                            )}
+                            className="border-b border-white/5 last:border-0"
                           >
                             <button
                               onClick={() => setExpandedCredibility(isExpanded ? null : source.name)}
-                              className="w-full p-4 flex items-center justify-between"
+                              className="w-full py-3 flex items-center justify-between group"
                             >
-                              <div className="flex items-center gap-3 flex-1 text-left">
-                                <div className="flex flex-col items-center min-w-[50px]">
-                                  <div className={cn("text-2xl font-bold", scoreColor)}>
+                              <div className="flex items-center gap-3">
+                                 <div className={cn("text-xs font-mono font-bold w-8 text-right", scoreColor)}>
                                     {source.credibilityScore}
                                   </div>
-                                  <div className="text-[9px] text-gray-400 uppercase tracking-wider">Score</div>
-                                </div>
-                                <div className="flex-1">
-                                  <div className="text-sm font-semibold text-white mb-1">{source.name}</div>
-                                  <div className="flex items-center gap-3 text-xs text-gray-400">
-                                    <span className="flex items-center gap-1">
-                                      <TrendingUp size={12} />
-                                      {source.trackRecord.factCheckAccuracy}% accuracy
-                                    </span>
-                                    <span>•</span>
-                                    <span>{source.trackRecord.retractionRate}% retractions</span>
-                                  </div>
-                                </div>
+                                  <span className="text-sm text-gray-300 group-hover:text-white transition-colors">{source.name}</span>
                               </div>
                               {isExpanded ? (
-                                <ChevronUp size={16} className="text-gray-400 ml-2" />
+                                <ChevronUp size={14} className="text-gray-600" />
                               ) : (
-                                <ChevronDown size={16} className="text-gray-400 ml-2" />
+                                <ChevronDown size={14} className="text-gray-600" />
                               )}
                             </button>
 
                             {isExpanded && (
-                              <div className="px-4 pb-4 space-y-3 border-t border-white/5 pt-3">
-                                {/* Track Record */}
-                                <div className="space-y-2">
-                                  <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Track Record</div>
-                                  <div className="grid grid-cols-2 gap-2">
-                                    <div className="bg-white/5 rounded-lg p-2">
-                                      <div className="text-xs text-gray-400 mb-1">Fact-Check Accuracy</div>
-                                      <div className="text-sm font-semibold text-white">{source.trackRecord.factCheckAccuracy}%</div>
+                              <div className="pl-11 pb-4 pr-4 space-y-3">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                      <div className="text-[10px] text-gray-500 uppercase mb-1">Accuracy</div>
+                                      <div className="text-sm font-medium text-gray-200">{source.trackRecord.factCheckAccuracy}%</div>
                                     </div>
-                                    <div className="bg-white/5 rounded-lg p-2">
-                                      <div className="text-xs text-gray-400 mb-1">Retraction Rate</div>
-                                      <div className="text-sm font-semibold text-white">{source.trackRecord.retractionRate}%</div>
+                                    <div>
+                                      <div className="text-[10px] text-gray-500 uppercase mb-1">Bias</div>
+                                      <div className="text-sm font-medium text-gray-200">
+                                         {source.biasPattern.political.charAt(0).toUpperCase() + source.biasPattern.political.slice(1)}
+                                      </div>
                                     </div>
-                                  </div>
-                                </div>
-
-                                {/* Bias Pattern */}
-                                <div className="space-y-2">
-                                  <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Bias Pattern</div>
-                                  <div className="flex gap-2 flex-wrap">
-                                    <span className="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-gray-300">
-                                      {source.biasPattern.political.charAt(0).toUpperCase() + source.biasPattern.political.slice(1)}
-                                    </span>
-                                    <span className="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-gray-300">
-                                      {source.biasPattern.economic.charAt(0).toUpperCase() + source.biasPattern.economic.slice(1)}
-                                    </span>
-                                  </div>
-                                </div>
-
-                                {/* Last Verified */}
-                                <div className="text-xs text-gray-500">
-                                  Last verified: {new Date(source.lastVerified).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                                 </div>
                               </div>
                             )}
@@ -384,22 +330,18 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
                         );
                       })}
                     </div>
-                  </div>
                 </div>
               )}
             </>
           )}
 
           {activeTab === 'perspectives' && (
-            <div className="space-y-4">
+            <div className="space-y-8">
               {/* CORE DIVERGENCE */}
               {data.coreDivergence && (
-                <div className="bg-gray-900/60 rounded-2xl p-5 border border-orange-500/30">
-                  <div className="flex items-center gap-2 mb-3">
-                    <GitBranch size={16} className="text-orange-400" />
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-orange-400">CORE DIVERGENCE</h4>
-                  </div>
-                  <p className="text-sm text-gray-200 leading-relaxed">
+                <div className="mb-6">
+                  <h4 className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-2">Core Divergence</h4>
+                  <p className="text-base text-gray-100 leading-relaxed font-light">
                     {data.coreDivergence.title}
                   </p>
                 </div>
@@ -407,64 +349,34 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
 
               {/* PERSPECTIVES - Side by Side */}
               {data.perspectives && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Left Perspective */}
-                  <div className="bg-gray-900/60 rounded-2xl p-5 border border-blue-500/30">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-blue-400 mb-3">
+                  <div className="relative pl-4 border-l-2 border-blue-500/30">
+                    <h4 className="text-xs font-semibold uppercase tracking-widest text-blue-400 mb-2">
                       {data.perspectives.left.title}
                     </h4>
-                    <p className="text-sm text-gray-200 leading-relaxed mb-3">
+                    <p className="text-sm text-gray-300 leading-relaxed mb-3">
                       {data.perspectives.left.text}
                     </p>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20">
-                        <span className="text-[10px] font-medium text-blue-300">
-                          {data.perspectives.left.source}
-                        </span>
-                      </div>
-                      {data.sourceCredibility && (() => {
-                        const source = data.sourceCredibility.sources.find(s => s.name === data.perspectives?.left.source);
-                        if (source) {
-                          const scoreColor = source.credibilityScore >= 80 ? 'text-green-400 border-green-500/30 bg-green-500/10' : source.credibilityScore >= 65 ? 'text-yellow-400 border-yellow-500/30 bg-yellow-500/10' : 'text-red-400 border-red-500/30 bg-red-500/10';
-                          return (
-                            <div className={cn("inline-flex items-center gap-1 px-2 py-0.5 rounded-full border text-[10px] font-medium", scoreColor)}>
-                              <Shield size={10} />
-                              {source.credibilityScore}
-                            </div>
-                          );
-                        }
-                        return null;
-                      })()}
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-medium text-gray-500 uppercase tracking-wider">
+                        Source: {data.perspectives.left.source}
+                      </span>
                     </div>
                   </div>
 
                   {/* Right Perspective */}
-                  <div className="bg-gray-900/60 rounded-2xl p-5 border border-purple-500/30">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-purple-400 mb-3">
+                  <div className="relative pl-4 border-l-2 border-purple-500/30">
+                    <h4 className="text-xs font-semibold uppercase tracking-widest text-purple-400 mb-2">
                       {data.perspectives.right.title}
                     </h4>
-                    <p className="text-sm text-gray-200 leading-relaxed mb-3">
+                    <p className="text-sm text-gray-300 leading-relaxed mb-3">
                       {data.perspectives.right.text}
                     </p>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-500/10 border border-purple-500/20">
-                        <span className="text-[10px] font-medium text-purple-300">
-                          {data.perspectives.right.source}
-                        </span>
-                      </div>
-                      {data.sourceCredibility && (() => {
-                        const source = data.sourceCredibility.sources.find(s => s.name === data.perspectives?.right.source);
-                        if (source) {
-                          const scoreColor = source.credibilityScore >= 80 ? 'text-green-400 border-green-500/30 bg-green-500/10' : source.credibilityScore >= 65 ? 'text-yellow-400 border-yellow-500/30 bg-yellow-500/10' : 'text-red-400 border-red-500/30 bg-red-500/10';
-                          return (
-                            <div className={cn("inline-flex items-center gap-1 px-2 py-0.5 rounded-full border text-[10px] font-medium", scoreColor)}>
-                              <Shield size={10} />
-                              {source.credibilityScore}
-                            </div>
-                          );
-                        }
-                        return null;
-                      })()}
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-medium text-gray-500 uppercase tracking-wider">
+                        Source: {data.perspectives.right.source}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -472,37 +384,30 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
 
               {/* LANGUAGE ANALYSIS */}
               {data.languageAnalysis && data.languageAnalysis.length > 0 && (
-                <div className="bg-gray-900/60 rounded-2xl p-5 border border-white/5">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Eye size={16} className="text-purple-400" />
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400">LANGUAGE ANALYSIS</h4>
-                  </div>
+                <div>
+                  <h4 className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-4">Language Analysis</h4>
                   <div className="space-y-4">
                     {data.languageAnalysis.map((analysis, index) => (
                       <div key={index} className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <span className="text-sm font-medium text-gray-200">
-                              &ldquo;{analysis.term}&rdquo;
-                            </span>
-                            <span className="text-xs text-gray-400 ml-2">
-                              ({analysis.type})
-                            </span>
+                        <div className="flex items-center justify-between text-sm">
+                          <div className="flex items-center gap-2">
+                             <span className="text-gray-200 font-medium">&ldquo;{analysis.term}&rdquo;</span>
+                             <span className="text-gray-500 text-xs">({analysis.type})</span>
                           </div>
                           <span className={cn(
                             "text-xs font-medium",
                             analysis.color === 'blue' ? "text-blue-400" : "text-purple-400"
                           )}>
-                            {analysis.usedBy}
+                            Used by {analysis.usedBy}
                           </span>
                         </div>
-                        <div className="relative h-2 bg-gray-800 rounded-full overflow-hidden">
+                        <div className="relative h-1 bg-white/10 rounded-full overflow-hidden">
                           <div
                             className={cn(
                               "absolute left-0 top-0 h-full rounded-full transition-all",
                               analysis.color === 'blue'
-                                ? "bg-blue-500"
-                                : "bg-purple-500"
+                                ? "bg-blue-500/50"
+                                : "bg-purple-500/50"
                             )}
                             style={{ width: `${analysis.percentage}%` }}
                           />
@@ -518,60 +423,57 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
           {activeTab === 'copilot' && (
             <div className="flex flex-col h-full">
               {/* Chat Messages */}
-              <div className="flex-1 overflow-y-auto no-scrollbar space-y-4 pb-24 px-6">
+              <div className="flex-1 overflow-y-auto no-scrollbar space-y-6 pb-24 px-6">
                 {messages.map((message) => (
                   <div
                     key={message.id}
                     className={cn(
-                      "flex gap-3",
+                      "flex gap-4",
                       message.isAI ? "items-start" : "items-end flex-row-reverse"
                     )}
                   >
                     {message.isAI && (
-                      <div className="w-6 h-6 rounded-full bg-white/10 backdrop-blur-xl border border-white/30 flex items-center justify-center flex-shrink-0 mt-1 shadow-[0_0_10px_rgba(255,255,255,0.1)]">
-                        <Sparkles size={12} className="text-white" />
+                      <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+                        <Sparkles size={14} className="text-white/70" />
                       </div>
                     )}
                     <div
                       className={cn(
-                        "rounded-2xl px-4 py-3 max-w-[80%]",
+                        "max-w-[85%] text-sm leading-relaxed",
                         message.isAI
-                          ? "bg-gray-900/60 border border-white/5"
-                          : "bg-blue-500/20 border border-blue-500/30"
+                          ? "text-gray-200"
+                          : "bg-white/10 text-white px-4 py-2.5 rounded-2xl rounded-tr-none"
                       )}
                     >
-                      <p className="text-sm text-gray-200 leading-relaxed whitespace-pre-wrap">
-                        {message.text}
-                      </p>
+                      <p className="whitespace-pre-wrap">{message.text}</p>
                     </div>
                   </div>
                 ))}
 
                 {/* Typing Indicator */}
                 {isTyping && (
-                  <div className="flex gap-3 items-start">
-                    <div className="w-6 h-6 rounded-full bg-white/10 backdrop-blur-xl border border-white/30 flex items-center justify-center flex-shrink-0 mt-1 shadow-[0_0_10px_rgba(255,255,255,0.1)]">
-                      <Sparkles size={12} className="text-white" />
+                  <div className="flex gap-4 items-start">
+                    <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+                      <Sparkles size={14} className="text-white/70" />
                     </div>
-                    <div className="bg-gray-900/60 rounded-2xl px-4 py-3 border border-white/5">
-                      <div className="flex gap-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                      </div>
+                    <div className="flex gap-1 pt-3">
+                        <div className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <div className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <div className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                     </div>
                   </div>
                 )}
 
                 {/* Suggested Questions */}
                 {messages.length === 1 && !isTyping && (
-                  <div className="space-y-2 pt-2">
+                  <div className="grid grid-cols-1 gap-2 pt-4 pl-12">
                     {suggestedQuestions.map((question, index) => (
                       <button
                         key={index}
                         onClick={() => handleSuggestedQuestion(question)}
-                        className="w-full text-left bg-gray-900/60 hover:bg-gray-900/80 rounded-xl px-4 py-3 border border-white/5 text-sm text-gray-200 transition-colors"
+                        className="text-left text-sm text-gray-400 hover:text-blue-400 transition-colors py-2 border-b border-white/5 last:border-0 flex items-center gap-2 group"
                       >
+                        <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
                         {question}
                       </button>
                     ))}
@@ -582,8 +484,8 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
               </div>
 
               {/* Input Area */}
-              <div className="pt-4 pb-6 px-6 border-t border-white/5">
-                <div className="flex gap-2 items-center">
+              <div className="pt-4 pb-6 px-6 border-t border-white/10 bg-[#121212]">
+                <div className="flex gap-3 items-center bg-white/5 border border-white/10 rounded-full px-2 py-2 focus-within:border-white/20 focus-within:bg-white/10 transition-all">
                   <input
                     ref={inputRef}
                     type="text"
@@ -595,22 +497,22 @@ export function ContextAI({ category, isOpen, onClose }: ContextAIProps) {
                         handleSendMessage();
                       }
                     }}
-                    placeholder="Ask Prism anything..."
-                    className="flex-1 bg-gray-900/60 border border-white/5 rounded-xl px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all"
+                    placeholder="Ask follow-up..."
+                    className="flex-1 bg-transparent border-none text-sm text-white placeholder:text-gray-500 focus:ring-0 px-3"
                     disabled={isTyping}
                   />
                   <button
                     onClick={() => handleSendMessage()}
                     disabled={!inputValue.trim() || isTyping}
                     className={cn(
-                      "w-10 h-10 rounded-full flex items-center justify-center transition-all flex-shrink-0",
+                      "w-8 h-8 rounded-full flex items-center justify-center transition-all flex-shrink-0",
                       inputValue.trim() && !isTyping
-                        ? "bg-blue-500 hover:bg-blue-600 text-white"
-                        : "bg-gray-800 text-gray-500 cursor-not-allowed"
+                        ? "bg-white text-black hover:bg-gray-200"
+                        : "bg-white/5 text-gray-500 cursor-not-allowed"
                     )}
                     aria-label="Send message"
                   >
-                    <Send size={18} />
+                    <Send size={14} />
                   </button>
                 </div>
               </div>
