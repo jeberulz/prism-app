@@ -161,11 +161,11 @@ export function DiscoverView({ onOpenStory }: DiscoverViewProps) {
           </div>
         </div>
 
-        <h3 className="text-xs font-medium text-gray-500 uppercase tracking-widest mb-3">Trending Now</h3>
-        <div className="grid grid-cols-2 gap-4 pb-8">
+        <h3 className="text-xs font-medium text-gray-500 uppercase tracking-widest mb-4">Trending Now</h3>
+        <div className="space-y-1 pb-8">
           {filteredItems.length > 0 ? (
             filteredItems.map((item, index) => (
-              <div key={index} className="space-y-2 cursor-pointer group" onClick={() => {
+              <div key={index} className="flex items-start gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors cursor-pointer group" onClick={() => {
                 // Find matching story or create a mock one
                 const story = discoverItems.find(s => s.title === item.title);
                 if (story) {
@@ -187,27 +187,37 @@ export function DiscoverView({ onOpenStory }: DiscoverViewProps) {
                   } as Story);
                 }
               }}>
-                <div className="aspect-[4/3] rounded-xl overflow-hidden border border-gray-800 relative">
+                <span className="text-lg font-bold text-cyan-500/30 w-4 flex-shrink-0 text-center mt-0.5 group-hover:text-cyan-400/60 transition-colors font-mono">
+                  {index + 1}
+                </span>
+                
+                <div className="flex-1 min-w-0 py-0.5">
+                  <h4 className="text-sm font-medium text-gray-200 leading-snug mb-1.5 group-hover:text-white transition-colors line-clamp-2">
+                    {item.title}
+                  </h4>
+                  <div className="flex items-center gap-2 text-[10px] text-gray-500 font-medium">
+                     <div className="flex items-center gap-1.5">
+                        <div className="w-3 h-3 rounded-full bg-cyan-500/10 flex items-center justify-center text-[6px] text-cyan-300 font-bold border border-cyan-500/20">P</div>
+                        <span>Prism Wire</span>
+                     </div>
+                     <span className="text-gray-700">•</span>
+                     <span>4h ago</span>
+                  </div>
+                </div>
+
+                <div className="w-16 h-16 rounded-lg overflow-hidden relative flex-shrink-0 border border-white/10 bg-gray-900 group-hover:border-cyan-500/20 transition-colors">
                   <Image
                     src={item.img}
                     alt={item.title}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover opacity-70 group-hover:opacity-100 transition-opacity duration-300"
                     unoptimized
                   />
-                  {item.trend && (
-                    <div className="absolute bottom-2 right-2 bg-black/60 backdrop-blur-md px-1.5 py-0.5 rounded text-[9px] font-medium text-green-300 border border-green-500/30">
-                      {item.trend}
-                    </div>
-                  )}
                 </div>
-                <p className="text-xs font-medium leading-snug text-gray-200 group-hover:text-white transition-colors">
-                  {item.title}
-                </p>
               </div>
             ))
           ) : (
-            <div className="col-span-2 text-center text-gray-500 text-sm py-8">No stories found.</div>
+            <div className="text-center text-gray-500 text-sm py-8">No stories found.</div>
           )}
         </div>
       </div>
