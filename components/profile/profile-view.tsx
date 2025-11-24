@@ -16,7 +16,7 @@ export function ProfileView() {
         <div className="flex flex-col items-center mb-8">
           <div className="w-24 h-24 rounded-full border-2 border-gray-800 p-1 mb-4 relative group cursor-pointer">
             <Image
-              src="https://picsum.photos/400/400?random=21"
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=faces"
               alt="Profile"
               width={96}
               height={96}
@@ -27,8 +27,8 @@ export function ProfileView() {
               <Camera size={24} className="text-white" />
             </div>
           </div>
-          <h2 className="text-xl font-semibold tracking-tight">Jordan Lee</h2>
-          <span className="text-sm text-gray-500">@jordy_updates</span>
+          <h2 className="text-xl font-semibold tracking-tight">John Iseghohi</h2>
+          <span className="text-sm text-gray-500">@john_iseghohi</span>
           <div className="flex gap-6 mt-4 text-sm">
             <div className="text-center">
               <span className="font-bold text-white">248</span>{' '}
